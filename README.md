@@ -11,6 +11,8 @@ okhttp的请求队列和连接池等控制和优化措施。
 
 ## 快速集成
 
+> Minimum supported Gradle version is 6.5
+
 - 1.在项目根目录的build.gradle里添加依赖
 ```
 dependencies {
