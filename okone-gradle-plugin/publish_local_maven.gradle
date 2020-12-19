@@ -1,5 +1,9 @@
 apply plugin: 'maven'
 
+ext {
+    PUBLISH_VERSION = V_OKONE_GRADLE_PLUGIN + "-beta"
+}
+
 // maven配置
 uploadArchives {
     repositories.mavenDeployer {
@@ -8,7 +12,7 @@ uploadArchives {
         pom.project {
             groupId 'com.cdh.okone'
             artifactId 'gradle'
-            version '0.0.1'
+            version project.PUBLISH_VERSION
         }
     }
 }
