@@ -1,0 +1,14 @@
+apply plugin: 'maven'
+
+// maven配置
+uploadArchives {
+    repositories.mavenDeployer {
+        repository(url: uri('../repos'))
+
+        pom.project {
+            groupId 'com.cdh.okone'
+            artifactId 'gradle'
+            version '0.0.1'
+        }
+    }
+}
