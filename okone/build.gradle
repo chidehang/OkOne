@@ -1,5 +1,7 @@
 apply plugin: 'com.android.library'
-apply from: 'publish_jcenter.gradle'
+if (Boolean.parseBoolean(PUBLISH_OKONE_LIB)) {
+    apply from: 'publish_jcenter.gradle'
+}
 
 android {
     compileSdkVersion 29
