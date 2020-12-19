@@ -1,0 +1,45 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        google()
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+//        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.6'
+//        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.4.1'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'groovy'
+apply plugin: 'maven'
+
+repositories {
+    mavenLocal()
+    google()
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    compile gradleApi()
+    compile localGroovy()
+
+    compile 'com.android.tools.build:gradle:4.1.1'
+    compile 'org.javassist:javassist:3.22.0-GA'
+    compile 'commons-io:commons-io:2.6'
+}
+
+// maven配置
+uploadArchives {
+    repositories.mavenDeployer {
+        repository(url: uri('../repos'))
+
+        pom.project {
+            groupId 'cdh.okone.gradle'
+            artifactId 'okone-plugin'
+            version '1.0.0'
+        }
+    }
+}

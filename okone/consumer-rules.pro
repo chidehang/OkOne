@@ -1,0 +1,2 @@
+-keep class com.cdh.okone.OkOne { *; }
+-keep class com.cdh.okone.InjectHelper { *; }
