@@ -64,7 +64,7 @@ public class GlobalOkHttpClientManager {
 
                 Iterator iterator = sOkHttpClientCache.entrySet().iterator();
                 while (iterator.hasNext()) {
-                    Map.Entry<OkHttpClient.Builder, OkHttpClient> entry = (Map.Entry<OkHttpClient.Builder, OkHttpClient>) iterator.next();OkHttpClient.Builder self = entry.getKey();
+                    Map.Entry<OkHttpClient.Builder, OkHttpClient> entry = (Map.Entry<OkHttpClient.Builder, OkHttpClient>) iterator.next();
                     // 进行比较
                     boolean result = (boolean) method.invoke(builder, entry.getKey());
                     if (result) {
