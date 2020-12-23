@@ -20,49 +20,49 @@ import okio.Timeout;
  */
 public class BuildConnectionProcessor {
 
-//    public static final Call NONE_CALL = new Call() {
-//        @NotNull
-//        @Override
-//        public Request request() {
-//            return null;
-//        }
-//
-//        @NotNull
-//        @Override
-//        public Response execute() throws IOException {
-//            return null;
-//        }
-//
-//        @Override
-//        public void enqueue(@NotNull Callback callback) {
-//        }
-//
-//        @Override
-//        public void cancel() {
-//        }
-//
-//        @Override
-//        public boolean isExecuted() {
-//            return false;
-//        }
-//
-//        @Override
-//        public boolean isCanceled() {
-//            return false;
-//        }
-//
-//        @NotNull
-//        @Override
-//        public Timeout timeout() {
-//            return null;
-//        }
-//
-//        @NotNull
-//        @Override
-//        public Call clone() {
-//            return null;
-//        }
-//    };
+    public static final Call NONE_CALL = new Call() {
+        @NotNull
+        @Override
+        public Request request() {
+            return null;
+        }
+
+        @NotNull
+        @Override
+        public Response execute() throws IOException {
+            return null;
+        }
+
+        @Override
+        public void enqueue(@NotNull Callback callback) {
+        }
+
+        @Override
+        public void cancel() {
+        }
+
+        @Override
+        public boolean isExecuted() {
+            return false;
+        }
+
+        @Override
+        public boolean isCanceled() {
+            return false;
+        }
+
+        @NotNull
+        @Override
+        public Timeout timeout() {
+            return null;
+        }
+
+        @NotNull
+        @Override
+        public Call clone() {
+            return null;
+        }
+    };
 
     /**
      * 预建连

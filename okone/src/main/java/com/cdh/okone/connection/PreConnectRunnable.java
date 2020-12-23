@@ -5,6 +5,7 @@ import com.cdh.okone.connection.callback.PreConnectCallback;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -76,7 +77,7 @@ public class PreConnectRunnable implements Runnable {
                     mClient.writeTimeoutMillis(),
                     mClient.pingIntervalMillis(),
                     false,
-                    null,
+                    BuildConnectionProcessor.NONE_CALL,
                     EventListener.NONE
             );
             mClient.getRouteDatabase().connected(connection.route());
@@ -135,7 +136,7 @@ public class PreConnectRunnable implements Runnable {
     }
 
     private static List<Route> selectRoutes(OkHttpClient client, Address address) throws IOException {
-        RouteSelector routeSelector = new RouteSelector(address, client.getRouteDatabase(), null, EventListener.NONE);
+        RouteSelector routeSelector = new RouteSelector(address, client.getRouteDatabase(), BuildConnectionProcessor.NONE_CALL, EventListener.NONE);
         RouteSelector.Selection selection = routeSelector.hasNext()? routeSelector.next() : null;
         return selection == null? null : selection.getRoutes();
     }
@@ -145,7 +146,7 @@ public class PreConnectRunnable implements Runnable {
      */
     private static boolean hasPooledConnection(RealConnectionPool realConnectionPool, Address address, List<Route> routes, boolean requireMultiplexed) {
         try {
-            Field connectionsField = realConnectionPool.getClass().getField("connections");
+            Field connectionsField = realConnectionPool.getClass().getDeclaredField("connections");
             connectionsField.setAccessible(true);
             ConcurrentLinkedQueue<RealConnection> connections = (ConcurrentLinkedQueue<RealConnection>) connectionsField.get(realConnectionPool);
 
@@ -153,17 +154,17 @@ public class PreConnectRunnable implements Runnable {
             for (RealConnection connection : connections) {
                 synchronized (connection) {
                     if (requireMultiplexed) {
-                        Field field = connection.getClass().getDeclaredField("isMultiplexed");
-                        field.setAccessible(true);
-                        boolean value = (boolean) field.get(connection);
+                        Method isMultiplexed = connection.getClass().getDeclaredMethod("isMultiplexed$okhttp");
+                        isMultiplexed.setAccessible(true);
+                        boolean value = (boolean) isMultiplexed.invoke(connection);
                         if (!value) {
                             continue;
                         }
                     }
 
-                    Method method = connection.getClass().getDeclaredMethod("isEligible", Address.class, List.class);
-                    method.setAccessible(true);
-                    boolean result = (boolean) method.invoke(connection, address, routes);
+                    Method isEligible = connection.getClass().getDeclaredMethod("isEligible$okhttp", Address.class, List.class);
+                    isEligible.setAccessible(true);
+                    boolean result = (boolean) isEligible.invoke(connection, address, routes);
                     if (!result) {
                         continue;
                     }
