@@ -64,7 +64,7 @@ public class PreConnectRunnable implements Runnable {
 
             RealConnectionPool realConnectionPool = findRealConnectionPool(mClient);
             if (hasPooledConnection(realConnectionPool, address, routes, false)) {
-                callConnectFailed(mPreConnectCallback, new IllegalStateException("There is already a connection with the same address."));
+                callConnectFailed(mPreConnectCallback, new IllegalStateException("There is already a connection with the same address.[1]"));
                 return;
             }
 
@@ -87,7 +87,7 @@ public class PreConnectRunnable implements Runnable {
                     connection.socket().close();
                 } catch (Throwable t) {
                 }
-                callConnectFailed(mPreConnectCallback, new IllegalStateException("There is already a connection with the same address."));
+                callConnectFailed(mPreConnectCallback, new IllegalStateException("There is already a connection with the same address.[2]"));
             }
 
             synchronized (connection) {

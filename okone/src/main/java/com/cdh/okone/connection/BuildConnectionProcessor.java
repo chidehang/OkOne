@@ -78,7 +78,7 @@ public class BuildConnectionProcessor {
         if (client.connectionPool().idleConnectionCount() >= 5) {
             // 空闲连接数达到5个
             if (callback != null) {
-                callback.connectFailed(new IllegalStateException("The idle connections reached the upper limit."));
+                callback.connectFailed(new IllegalStateException("The idle connections reached the upper limit<5>."));
             }
             return;
         }
