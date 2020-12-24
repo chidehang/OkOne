@@ -9,9 +9,13 @@ okhttp的请求队列和连接池等控制和优化措施。
 借助该OkOne库可以**无侵入**地将分散在不同组件中的OkHttpClient进行收敛，由OkOne进行统一复用和管理。OkOne会比较OkHttpClient.Builder
 进行区分复用，即相同配置的OkHttpClient.Builder将自动复用同一个OkHttpClient实例。
 
+除此之外，OkOne还提供了其他扩展的高级功能，更详细的介绍可以查看相关博文：
+[《OkOne-基于okhttp的网络性能优化框架》](https://juejin.cn/post/6908178914779561997)
+
 ## 快速集成
 
 > Minimum supported Gradle version is 6.5
+> Minimum supported OkHttp version is 4.1.0
 
 - 1.在项目根目录的build.gradle里添加依赖
 ```
@@ -27,7 +31,7 @@ apply plugin: 'plugin.cdh.okone'
 
 - 3.在app module的build.gradle的dependencies里添加依赖
 ```
-implementation 'com.cdh.okone:okone:0.1.2'
+implementation 'com.cdh.okone:okone:0.2.0'
 ```
 
 至此已完成接入，后续直接打包apk运行即可。
@@ -53,6 +57,22 @@ OkOne.setLogEnable(true);
 OkHttpClient client = new OkHttpClient(builder); 
 ```
 
-## Wiki
-[OkOne-Home](https://github.com/chidehang/OkOne/wiki/OkOne-Home)
+#### 预建连
+开发者可以在合适的时机提前建立连接，若连接成功则添加进okhttp连接池。
+```
+OkOne.preBuildConnection(okHttpClient, url, new PreConnectCallback() {
+    @Override
+    public void connectCompleted(String url) {
+        Log.d(TAG, "预建连成功: " + url);
+    }
+
+    @Override
+    public void connectFailed(Throwable t) {
+        Log.e(TAG, "预建连失败", t);
+    }
+});
+```
+
+## 更新日志
+[Change Log](https://github.com/chidehang/OkOne/wiki/Change-Log)
 
