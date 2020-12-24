@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.cdh.okone.OkOne;
+import com.cdh.okone.connection.callback.PreConnectCallback;
 import com.cdh.okone.util.LogUtils;
 
 import org.jetbrains.annotations.NotNull;
@@ -35,6 +36,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private static final String TAG = "MainActivity";
 
+    private static final String URL_FOR_TEST = "https://stackoverflow.com/";
+    private static final String URL_JUEJIN = "https://juejin.cn/";
+    private static final String URL_ZHIHU = "https://www.zhihu.com/";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +50,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void initView() {
         findViewById(R.id.btn_build_client_1).setOnClickListener(this);
         findViewById(R.id.btn_build_client_2).setOnClickListener(this);
+        findViewById(R.id.btn_pre_connect_stackoverflow).setOnClickListener(this);
+        findViewById(R.id.btn_pre_connect_juejin).setOnClickListener(this);
+        findViewById(R.id.btn_pre_connect_zhihu).setOnClickListener(this);
         findViewById(R.id.btn_build_client_3).setOnClickListener(this);
     }
 
@@ -52,38 +60,91 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_build_client_1:
-                OkHttpClient.Builder builder1 = new OkHttpClient.Builder()
-                        .connectTimeout(10, TimeUnit.SECONDS)
-                        .addInterceptor(new HttpLoggingInterceptor())
-                        .eventListener(mEventListener);
+                OkHttpClient.Builder builder1 = createBuilder1();
                 testRequestServer(builder1);
                 break;
 
             case R.id.btn_build_client_2:
-                OkHttpClient.Builder builder2 = new OkHttpClient.Builder()
-                        .retryOnConnectionFailure(true)
-                        .minWebSocketMessageToCompress(2048)
-                        .eventListener(mEventListener);
+                OkHttpClient.Builder builder2 = createBuilder2();
                 testRequestServer(builder2);
                 break;
 
             case R.id.btn_build_client_3:
-                OkHttpClient.Builder builder3 = new OkHttpClient.Builder()
-                        .connectTimeout(10, TimeUnit.SECONDS)
-                        .addInterceptor(new HttpLoggingInterceptor())
-                        .retryOnConnectionFailure(true)
-                        .minWebSocketMessageToCompress(2048)
-                        .eventListener(mEventListener);
+                OkHttpClient.Builder builder3 = createBuilder3();
                 testRequestServer(builder3);
+                break;
+
+            case R.id.btn_pre_connect_stackoverflow:
+                testPreBuildConnection(createBuilder3(), URL_FOR_TEST);
+                break;
+
+            case R.id.btn_pre_connect_juejin:
+                testPreBuildConnection(createBuilder3(), URL_JUEJIN);
+                break;
+
+            case R.id.btn_pre_connect_zhihu:
+                testPreBuildConnection(createBuilder3(), URL_ZHIHU);
                 break;
         }
     }
 
+    /**
+     * 创建配方一
+     */
+    private OkHttpClient.Builder createBuilder1() {
+        return new OkHttpClient.Builder()
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .addInterceptor(new HttpLoggingInterceptor())
+                .eventListener(mEventListener);
+    }
+
+    /**
+     * 创建配方二
+     */
+    private OkHttpClient.Builder createBuilder2() {
+        return new OkHttpClient.Builder()
+                .retryOnConnectionFailure(true)
+                .minWebSocketMessageToCompress(2048)
+                .eventListener(mEventListener);
+    }
+
+    /**
+     * 创建配方三
+     */
+    private OkHttpClient.Builder createBuilder3() {
+        return new OkHttpClient.Builder()
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .addInterceptor(new HttpLoggingInterceptor())
+                .retryOnConnectionFailure(true)
+                .minWebSocketMessageToCompress(2048)
+                .eventListener(mEventListener);
+    }
+
+    /**
+     * 测试预建连
+     */
+    private void testPreBuildConnection(OkHttpClient.Builder builder, String url) {
+        OkOne.preBuildConnection(builder.build(), url, new PreConnectCallback() {
+            @Override
+            public void connectCompleted(String url) {
+                Log.d(TAG, "预建连成功: " + url);
+            }
+
+            @Override
+            public void connectFailed(Throwable t) {
+                Log.e(TAG, "预建连失败", t);
+            }
+        });
+    }
+
+    /**
+     * 测试不同配方的接口请求
+     */
     private void testRequestServer(OkHttpClient.Builder builder) {
         OkHttpClient client = builder.build();
         Log.d(TAG, "创建OkHttpClient: " + client);
 
-        String api = "https://www.zhihu.com/";
+        String api = URL_FOR_TEST;
         Request request = new Request.Builder()
                 .url(api)
                 .build();
