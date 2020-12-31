@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import okhttp3.OkHttpClient;
 
@@ -52,7 +53,7 @@ public class InjectHelper {
         LogUtils.d(TAG, "recordBuilderConfig() called with: builder = [" + builder + "], methodName = [" + methodName + "], args = [" + Arrays.toString(args) + "]");
         try {
             // 获取oConfigMap成员，用于存储配置项
-            HashMap<String, Object[]> map = findOConfigMapField(builder);
+            TreeMap<String, Object[]> map = findOConfigMapField(builder);
             if (map != null) {
                 if (methodName.startsWith("add") && map.containsKey(methodName)) {
                     // 兼容addInterceptor和addNetworkInterceptor方法
@@ -91,8 +92,8 @@ public class InjectHelper {
         }
 
         // 比较两者的oConfigMap的成员
-        HashMap<String, Object[]> selfMap = findOConfigMapField(self);
-        HashMap<String, Object[]> otherMap = findOConfigMapField(other);
+        TreeMap<String, Object[]> selfMap = findOConfigMapField(self);
+        TreeMap<String, Object[]> otherMap = findOConfigMapField(other);
         if (selfMap == null || otherMap == null) {
             return false;
         }
@@ -106,24 +107,32 @@ public class InjectHelper {
         }
 
         // 遍历配置项，比较是否进行一样的配置。有一项不一致就返回false。
-        Iterator iterator = selfMap.entrySet().iterator();
-        while (iterator.hasNext()) {
-            Map.Entry<String, Object[]> entry = (Map.Entry<String, Object[]>) iterator.next();
-            Object[] otherObjs = otherMap.get(entry.getKey());
-            if (entry.getValue() == otherObjs) {
+        Iterator selfIter = selfMap.entrySet().iterator();
+        Iterator otherIter = otherMap.entrySet().iterator();
+        // 按字典序遍历
+        while (selfIter.hasNext() && otherIter.hasNext()) {
+            Map.Entry<String, Object[]> selfEntry = (Map.Entry<String, Object[]>) selfIter.next();
+            Map.Entry<String, Object[]> otherEntry = (Map.Entry<String, Object[]>) otherIter.next();
+            if (!selfEntry.getKey().equals(otherEntry.getKey())) {
+                // 方法名称不同
+                return false;
+            }
+
+            Object[] otherObjs = otherEntry.getValue();
+            if (selfEntry.getValue() == otherObjs) {
                 continue;
             }
 
-            if (entry.getValue() == null || otherObjs == null) {
+            if (selfEntry.getValue() == null || otherObjs == null) {
                 return false;
             }
-            if (entry.getValue().length != otherObjs.length) {
+            if (selfEntry.getValue().length != otherObjs.length) {
                 return false;
             }
 
             // 遍历比较每个配置项的属性是否一样
             for (int i = 0; i < otherObjs.length; i++) {
-                Object obj1 = entry.getValue()[i];
+                Object obj1 = selfEntry.getValue()[i];
                 Object obj2 = otherObjs[i];
 
                 if (obj1 == obj2) {
@@ -148,11 +157,11 @@ public class InjectHelper {
     /**
      * 反射获取插入的oConfigMap成员
      */
-    private static HashMap<String, Object[]> findOConfigMapField(OkHttpClient.Builder builder) {
+    private static TreeMap<String, Object[]> findOConfigMapField(OkHttpClient.Builder builder) {
         try {
             Field field = builder.getClass().getDeclaredField("oConfigMap");
             field.setAccessible(true);
-            HashMap<String, Object[]> map = (HashMap<String, Object[]>) field.get(builder);
+            TreeMap<String, Object[]> map = (TreeMap<String, Object[]>) field.get(builder);
             return map;
         } catch (Throwable t) {
             t.printStackTrace();
