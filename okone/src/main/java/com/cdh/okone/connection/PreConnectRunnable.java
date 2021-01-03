@@ -88,6 +88,7 @@ public class PreConnectRunnable implements Runnable {
                 } catch (Throwable t) {
                 }
                 callConnectFailed(mPreConnectCallback, new IllegalStateException("There is already a connection with the same address.[2]"));
+                return;
             }
 
             synchronized (connection) {
