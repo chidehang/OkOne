@@ -36,7 +36,7 @@ apply plugin: 'plugin.cdh.okone'
 
 - 3.在app module的build.gradle的dependencies里添加依赖
 ```
-implementation 'com.cdh.okone:okone:0.3.0'
+implementation 'com.cdh.okone:okone:0.3.1'
 ```
 
 至此已完成接入，后续直接打包apk运行即可。
