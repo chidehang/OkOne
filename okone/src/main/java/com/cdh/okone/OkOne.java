@@ -6,6 +6,7 @@ import com.cdh.okone.priority.RequestPriorityProcessor;
 import com.cdh.okone.util.LogUtils;
 
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
 
 /**
  * Created by chidehang on 2020/11/24
@@ -35,5 +36,18 @@ public class OkOne {
         RequestPriorityProcessor.enableRequestPriority = enable;
     }
 
+    /**
+     * 设置请求的优先级[-10~10]
+     * 数值越大优先级越高
+     */
+    public static void setRequestPriority(Request request, int priority) {
+        RequestPriorityProcessor.setRequestPriority(request, priority);
+    }
 
+    /**
+     * 获取请求的优先级，默认0
+     */
+    public static int getRequestPriority(Request request) {
+        return RequestPriorityProcessor.getRequestPriority(request);
+    }
 }

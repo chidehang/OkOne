@@ -36,9 +36,8 @@ class DispatcherInjector implements IClassInjector {
 
         // 在构造方法中重新赋值
         String src = "readyAsyncCalls = com.cdh.okone.InjectHelper.DispatcherHooker.hookReadyAsyncCalls();"
-        CtConstructor ctConstructor = ctClass.getDeclaredConstructor(new CtClass[0])
-        println("Dispatcher构造方法: " + ctConstructor.getLongName())
-        ctConstructor.insertBefore(src)
+        CtConstructor ctConstructor = ctClass.getConstructor("()V")
+        ctConstructor.insertAfter(src)
 
         // 将修改后的还在内存中的代码重新写入文件
         ctClass.writeFile(workDir.absolutePath)
