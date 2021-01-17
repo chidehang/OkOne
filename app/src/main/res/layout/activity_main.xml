@@ -76,4 +76,12 @@
         android:layout_height="45dp"
         android:textAllCaps="false"
         android:text="Builder3-请求stackoverflow"/>
+
+    <Button
+        android:id="@+id/btn_test_priority"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="5dp"
+        android:textAllCaps="false"
+        android:text="测试优先级队列"/>
 </LinearLayout>

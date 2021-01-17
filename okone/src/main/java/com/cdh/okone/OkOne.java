@@ -2,6 +2,7 @@ package com.cdh.okone;
 
 import com.cdh.okone.connection.BuildConnectionProcessor;
 import com.cdh.okone.connection.callback.PreConnectCallback;
+import com.cdh.okone.priority.RequestPriorityProcessor;
 import com.cdh.okone.util.LogUtils;
 
 import okhttp3.OkHttpClient;
@@ -26,4 +27,13 @@ public class OkOne {
     public static void preBuildConnection(OkHttpClient client, String url, PreConnectCallback callback) {
         BuildConnectionProcessor.buildConnection(client, url, callback);
     }
+
+    /**
+     * 是否启用请求优先级
+     */
+    public static void enableRequestPriority(boolean enable) {
+        RequestPriorityProcessor.enableRequestPriority = enable;
+    }
+
+
 }

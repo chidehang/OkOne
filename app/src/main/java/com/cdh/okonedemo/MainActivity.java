@@ -9,6 +9,7 @@ import android.view.View;
 import com.cdh.okone.OkOne;
 import com.cdh.okone.connection.callback.PreConnectCallback;
 import com.cdh.okone.util.LogUtils;
+import com.cdh.okone.priority.PriorityArrayDeque;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -17,7 +18,9 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
@@ -54,6 +57,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.btn_pre_connect_juejin).setOnClickListener(this);
         findViewById(R.id.btn_pre_connect_zhihu).setOnClickListener(this);
         findViewById(R.id.btn_build_client_3).setOnClickListener(this);
+
+        findViewById(R.id.btn_test_priority).setOnClickListener(this);
     }
 
     @Override
@@ -84,6 +89,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.btn_pre_connect_zhihu:
                 testPreBuildConnection(createBuilder3(), URL_ZHIHU);
+                break;
+
+            case R.id.btn_test_priority:
+                testPriority();
                 break;
         }
     }
@@ -275,4 +284,43 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             LogUtils.d(TAG, "callFailed-> ioe = [" + ioe + "]");
         }
     };
+
+    private void testPriority() {
+        PriorityArrayDeque<Bean> queue = new PriorityArrayDeque<>();
+        Random r = new Random(System.currentTimeMillis());
+        for (int i=0; i<10; i++) {
+            queue.add(new Bean(i, r.nextInt(20) - 10));
+        }
+
+        Log.d(TAG, "-----");
+
+        Iterator<Bean> iterator = queue.iterator();
+        while (iterator.hasNext()) {
+            Bean bean = iterator.next();
+            Log.d(TAG, bean.toString());
+        }
+    }
+
+    private final class Bean implements Comparable<Bean> {
+        int id;
+        int priority;
+
+        public Bean(int id, int priority) {
+            this.id = id;
+            this.priority = priority;
+        }
+
+        @Override
+        public int compareTo(Bean o) {
+            return this.priority - o.priority;
+        }
+
+        @Override
+        public String toString() {
+            return "Bean{" +
+                    "id=" + id +
+                    ", priority=" + priority +
+                    '}';
+        }
+    }
 }

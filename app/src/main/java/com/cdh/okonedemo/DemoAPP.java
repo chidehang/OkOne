@@ -13,5 +13,6 @@ public class DemoAPP extends Application {
     public void onCreate() {
         super.onCreate();
         OkOne.setLogEnable(true);
+        OkOne.enableRequestPriority(true);
     }
 }
