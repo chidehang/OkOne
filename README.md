@@ -25,7 +25,7 @@ okhttp的请求队列和连接池等控制和优化措施。
 - 1.在项目根目录的build.gradle里添加依赖
 ```
 dependencies {
-    classpath 'com.cdh.okone:gradle:0.2.0'
+    classpath 'com.cdh.okone:gradle:0.3.0'
 }
 ```
 
@@ -36,7 +36,7 @@ apply plugin: 'plugin.cdh.okone'
 
 - 3.在app module的build.gradle的dependencies里添加依赖
 ```
-implementation 'com.cdh.okone:okone:0.3.1'
+implementation 'com.cdh.okone:okone:0.4.0'
 ```
 
 至此已完成接入，后续直接打包apk运行即可。
@@ -76,6 +76,22 @@ OkOne.preBuildConnection(okHttpClient, url, new PreConnectCallback() {
         Log.e(TAG, "预建连失败", t);
     }
 });
+```
+
+#### 请求优先级
+支持给请求Request设置优先级，尽可能让高优先级请求任务先发起。
+**优先级范围[-10,10]，默认值0，值越大优先级越高。**
+
+- 1. 启用请求优先级功能（默认关闭）
+需要在创建OkHttpClient之前设置。
+```
+OkOne.enableRequestPriority(true);
+```
+
+- 2. 给Request设置优先级
+```
+Request request = Request.Builder().url(URL_FOR_TEST).build();
+OkOne.setRequestPriority(request, priority);
 ```
 
 ## 更新日志
