@@ -14,6 +14,8 @@
 //}
 
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 apply plugin: 'plugin.cdh.okone'
 
 android {
@@ -55,7 +57,7 @@ dependencies {
     if (Boolean.parseBoolean(LOCAL_DEBUG)) {
         implementation project(':okone')
     } else {
-        implementation 'com.cdh.okone:okone:0.3.1'
+        implementation 'com.cdh.okone:okone:0.4.0'
     }
 
     api("com.squareup.okhttp3:logging-interceptor:4.9.0")
