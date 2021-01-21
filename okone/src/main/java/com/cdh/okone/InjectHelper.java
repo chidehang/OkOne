@@ -185,13 +185,17 @@ public class InjectHelper {
     }
 
     public static final class AsyncCallHooker {
-        public static int hookCompareTo(RealCall.AsyncCall selfCall, RealCall.AsyncCall otherCall) {
+        public static int hookCompareTo(Object selfObj, Object otherObj) {
             try {
-                Request self = selfCall.getRequest();
-                Request other = otherCall.getRequest();
-                int sp = (int) self.getClass().getDeclaredField("priority").get(self);
-                int op = (int) other.getClass().getDeclaredField("priority").get(other);
-                return sp - op;
+                if (selfObj instanceof RealCall.AsyncCall && otherObj instanceof RealCall.AsyncCall) {
+                    RealCall.AsyncCall selfCall = (RealCall.AsyncCall) selfObj;
+                    RealCall.AsyncCall otherCall = (RealCall.AsyncCall) otherObj;
+                    Request self = selfCall.getRequest();
+                    Request other = otherCall.getRequest();
+                    int sp = (int) self.getClass().getDeclaredField("priority").get(self);
+                    int op = (int) other.getClass().getDeclaredField("priority").get(other);
+                    return sp - op;
+                }
             } catch (Throwable t) {
                 t.printStackTrace();
             }
@@ -200,7 +204,7 @@ public class InjectHelper {
     }
 
     public static final class DispatcherHooker {
-        public static Deque hookReadyAsyncCalls() {
+        public static ArrayDeque hookReadyAsyncCalls() {
             if (RequestPriorityProcessor.enableRequestPriority) {
                 return new PriorityArrayDeque<>();
             } else {

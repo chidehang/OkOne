@@ -34,7 +34,7 @@ class AsyncCallInjector implements IClassInjector {
         ctClass.addInterface(pool.get("java.lang.Comparable"))
 
         String src = """
-                public int compareTo(okhttp3.internal.connection.RealCall\$AsyncCall o) {
+                public int compareTo(java.lang.Object o) {
                     return com.cdh.okone.InjectHelper.AsyncCallHooker.hookCompareTo(\$0, o);
                 }
             """
