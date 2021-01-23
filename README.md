@@ -16,6 +16,8 @@ okhttp的请求队列和连接池等控制和优化措施。
 
 [《OkOne-高级功能之OkHttp预建连以及原理剖析》](https://juejin.cn/post/6909817749493514247)
 
+[《OkOne-如何给okhttp的请求设置优先级》](https://juejin.cn/post/6920850276437983239/)
+
 ## 快速集成
 
 > Minimum supported Gradle version is 6.5
