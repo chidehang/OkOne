@@ -61,7 +61,7 @@ class ClientBuilderInjector implements IClassInjector {
         }
 
         // 给Builder添加一个oConfigMap成员
-        String code = "private java.util.TreeMap oConfigMap = new java.util.TreeMap();"
+        String code = "public java.util.TreeMap oConfigMap = new java.util.TreeMap();"
         CtField configMap = CtField.make(code, ctClass)
         ctClass.addField(configMap)
     }

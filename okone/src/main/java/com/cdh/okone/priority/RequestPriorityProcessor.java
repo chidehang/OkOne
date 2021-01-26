@@ -21,8 +21,7 @@ public class RequestPriorityProcessor {
     public static void setRequestPriority(Request request, int priority) {
         if (enableRequestPriority) {
             try {
-                Field field = request.getClass().getDeclaredField("priority");
-                field.setInt(request, checkBounds(priority));
+                request.priority = priority;
             } catch (Throwable t) {
                 LogUtils.printStackTrace(t);
             }
@@ -32,8 +31,7 @@ public class RequestPriorityProcessor {
     public static int getRequestPriority(Request request) {
         if (enableRequestPriority) {
             try {
-                Field field = request.getClass().getDeclaredField("priority");
-                field.getInt(request);
+                return request.priority;
             } catch (Throwable t) {
                 LogUtils.printStackTrace(t);
             }

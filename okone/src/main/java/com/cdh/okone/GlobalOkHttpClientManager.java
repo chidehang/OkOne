@@ -58,16 +58,11 @@ public class GlobalOkHttpClientManager {
     private OkHttpClient retrieveOkHttpClient(OkHttpClient.Builder builder) {
         synchronized (sOkHttpClientCache) {
             try {
-                // 反射调用给Builder注入的equivalentTo方法
-                Method method = builder.getClass().getDeclaredMethod("equivalentTo", OkHttpClient.Builder.class);
-                method.setAccessible(true);
-
                 Iterator iterator = sOkHttpClientCache.entrySet().iterator();
                 while (iterator.hasNext()) {
                     Map.Entry<OkHttpClient.Builder, OkHttpClient> entry = (Map.Entry<OkHttpClient.Builder, OkHttpClient>) iterator.next();
                     // 进行比较
-                    boolean result = (boolean) method.invoke(builder, entry.getKey());
-                    if (result) {
+                    if (builder.equivalentTo(entry.getKey())) {
                         // 比较结果相等，返回复用实例
                         return entry.getValue();
                     }
