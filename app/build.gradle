@@ -9,7 +9,7 @@
 //        }
 //    }
 //    dependencies {
-//        classpath 'com.cdh.okone:gradle:0.2.0-beta'
+//        classpath 'com.cdh.okone:gradle:0.4.0-beta'
 //    }
 //}
 
@@ -59,7 +59,7 @@ dependencies {
     if (Boolean.parseBoolean(LOCAL_DEBUG)) {
         implementation project(':okone')
     } else {
-        implementation 'com.cdh.okone:okone:0.4.0'
+        implementation 'com.cdh.okone:okone:0.5.0'
     }
 
     api("com.squareup.okhttp3:logging-interceptor:4.9.0")
