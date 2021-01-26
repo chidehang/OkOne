@@ -1,3 +1,4 @@
+include ':stub-okhttp'
 include ':okone-gradle-plugin'
 include ':okone'
 include ':app'

@@ -21,13 +21,11 @@ import okio.Timeout;
 public class BuildConnectionProcessor {
 
     public static final Call NONE_CALL = new Call() {
-        @NotNull
         @Override
         public Request request() {
             return null;
         }
 
-        @NotNull
         @Override
         public Response execute() throws IOException {
             return null;
@@ -51,13 +49,11 @@ public class BuildConnectionProcessor {
             return false;
         }
 
-        @NotNull
         @Override
         public Timeout timeout() {
             return null;
         }
 
-        @NotNull
         @Override
         public Call clone() {
             return null;

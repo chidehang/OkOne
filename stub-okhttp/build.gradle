@@ -1,6 +1,5 @@
-apply plugin: 'com.android.library'
-if (Boolean.parseBoolean(PUBLISH_OKONE_LIB)) {
-    apply from: 'publish_jcenter.gradle'
+plugins {
+    id 'com.android.library'
 }
 
 android {
@@ -12,15 +11,11 @@ android {
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles "consumer-rules.pro"
     }
 
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
     compileOptions {
@@ -30,7 +25,5 @@ android {
 }
 
 dependencies {
-//    api 'com.squareup.okhttp3:okhttp:4.9.0'
-    compileOnly project(':stub-okhttp')
     compileOnly 'com.squareup.okio:okio:2.8.0'
 }
