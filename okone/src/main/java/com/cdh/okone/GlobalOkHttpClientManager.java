@@ -41,12 +41,12 @@ public class GlobalOkHttpClientManager {
             // 查找可复用的缓存的OkHttpClient
             client = retrieveOkHttpClient(builder);
             if (client == null) {
-                LogUtils.d(TAG, "未命中缓存，新建OkHttpClient");
+                if (DEBUG) LogUtils.d(TAG, "未命中缓存，新建OkHttpClient");
                 // 未找到则新建，添加进缓存
                 client = new OkHttpClient(builder);
                 sOkHttpClientCache.put(builder, client);
             } else {
-                LogUtils.d(TAG, "命中缓存，可复用OkHttpClient");
+                if (DEBUG) LogUtils.d(TAG, "命中缓存，可复用OkHttpClient");
             }
         }
         return client;

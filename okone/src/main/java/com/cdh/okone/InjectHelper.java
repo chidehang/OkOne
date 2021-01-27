@@ -57,7 +57,7 @@ public class InjectHelper {
          * 记录配置项
          */
         private static void recordBuilderConfig(OkHttpClient.Builder builder, String methodName, Object... args) {
-            LogUtils.d(TAG, "recordBuilderConfig() called with: builder = [" + builder + "], methodName = [" + methodName + "], args = [" + Arrays.toString(args) + "]");
+            if (LogUtils.isEnabled) LogUtils.d(TAG, "recordBuilderConfig() called with: builder = [" + builder + "], methodName = [" + methodName + "], args = [" + Arrays.toString(args) + "]");
             try {
                 // 获取oConfigMap成员，用于存储配置项
                 TreeMap<String, Object[]> map = findOConfigMapField(builder);

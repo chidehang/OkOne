@@ -6,7 +6,6 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.cdh.okone.OkOne
 import com.cdh.okone.connection.callback.PreConnectCallback
-import com.cdh.okone.util.LogUtils
 import okhttp3.*
 import okhttp3.EventListener
 import okhttp3.internal.connection.RealCall
@@ -116,12 +115,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         val call = client.newCall(request)
         call.enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                LogUtils.d(TAG, "onFailure() called with: e = [$e]")
+                Log.d(TAG, "onFailure() called with: e = [$e]")
             }
 
             @Throws(IOException::class)
             override fun onResponse(call: Call, response: Response) {
-                LogUtils.d(TAG, "onResponse() called with: response = [$response]")
+                Log.d(TAG, "onResponse() called with: response = [$response]")
             }
         })
     }
@@ -129,91 +128,91 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private val mEventListener: EventListener = object : EventListener() {
         val TAG = "okflow"
         override fun callStart(call: Call) {
-            LogUtils.d(TAG, "callStart-> " + (call as RealCall).request().toString())
+            Log.d(TAG, "callStart-> " + (call as RealCall).request().toString())
         }
 
         override fun dnsStart(call: Call, domainName: String) {
-            LogUtils.d(TAG, "dnsStart-> domainName = [$domainName]")
+            Log.d(TAG, "dnsStart-> domainName = [$domainName]")
         }
 
         override fun dnsEnd(call: Call, domainName: String, inetAddressList: List<InetAddress>) {
-            LogUtils.d(TAG, "dnsEnd-> inetAddressList = [$inetAddressList]")
+            Log.d(TAG, "dnsEnd-> inetAddressList = [$inetAddressList]")
         }
 
         override fun connectStart(call: Call, inetSocketAddress: InetSocketAddress, proxy: Proxy) {
-            LogUtils.d(TAG, "connectStart-> inetSocketAddress = [$inetSocketAddress], proxy = [$proxy]")
+            Log.d(TAG, "connectStart-> inetSocketAddress = [$inetSocketAddress], proxy = [$proxy]")
         }
 
         override fun secureConnectStart(call: Call) {
-            LogUtils.d(TAG, "secureConnectStart->")
+            Log.d(TAG, "secureConnectStart->")
         }
 
         override fun secureConnectEnd(call: Call, handshake: Handshake?) {
-            LogUtils.d(TAG, "secureConnectEnd-> handshake = [$handshake]")
+            Log.d(TAG, "secureConnectEnd-> handshake = [$handshake]")
         }
 
         override fun connectEnd(call: Call, inetSocketAddress: InetSocketAddress, proxy: Proxy, protocol: Protocol?) {
-            LogUtils.d(TAG, "connectEnd->  protocol = [$protocol]")
+            Log.d(TAG, "connectEnd->  protocol = [$protocol]")
         }
 
         override fun connectFailed(call: Call, inetSocketAddress: InetSocketAddress, proxy: Proxy, protocol: Protocol?, ioe: IOException) {
-            LogUtils.d(TAG, "connectFailed-> protocol = [$protocol], ioe = [$ioe]")
+            Log.d(TAG, "connectFailed-> protocol = [$protocol], ioe = [$ioe]")
         }
 
         override fun connectionAcquired(call: Call, connection: Connection) {
-            LogUtils.d(TAG, "connectionAcquired-> connection = [$connection]")
+            Log.d(TAG, "connectionAcquired-> connection = [$connection]")
         }
 
         override fun connectionReleased(call: Call, connection: Connection) {
-            LogUtils.d(TAG, "connectionReleased-> connection = [$connection]")
+            Log.d(TAG, "connectionReleased-> connection = [$connection]")
         }
 
         override fun requestHeadersStart(call: Call) {
-            LogUtils.d(TAG, "requestHeadersStart->")
+            Log.d(TAG, "requestHeadersStart->")
         }
 
         override fun requestHeadersEnd(call: Call, request: Request) {
-            LogUtils.d(TAG, "requestHeadersEnd-> request = [$request]")
+            Log.d(TAG, "requestHeadersEnd-> request = [$request]")
         }
 
         override fun requestBodyStart(call: Call) {
-            LogUtils.d(TAG, "requestBodyStart->")
+            Log.d(TAG, "requestBodyStart->")
         }
 
         override fun requestBodyEnd(call: Call, byteCount: Long) {
-            LogUtils.d(TAG, "requestBodyEnd-> byteCount = [$byteCount]")
+            Log.d(TAG, "requestBodyEnd-> byteCount = [$byteCount]")
         }
 
         override fun requestFailed(call: Call, ioe: IOException) {
-            LogUtils.d(TAG, "requestFailed-> ioe = [$ioe]")
+            Log.d(TAG, "requestFailed-> ioe = [$ioe]")
         }
 
         override fun responseHeadersStart(call: Call) {
-            LogUtils.d(TAG, "responseHeadersStart->")
+            Log.d(TAG, "responseHeadersStart->")
         }
 
         override fun responseHeadersEnd(call: Call, response: Response) {
-            LogUtils.d(TAG, "responseHeadersEnd-> response = [$response]")
+            Log.d(TAG, "responseHeadersEnd-> response = [$response]")
         }
 
         override fun responseBodyStart(call: Call) {
-            LogUtils.d(TAG, "responseBodyStart->")
+            Log.d(TAG, "responseBodyStart->")
         }
 
         override fun responseBodyEnd(call: Call, byteCount: Long) {
-            LogUtils.d(TAG, "responseBodyEnd-> byteCount = [$byteCount]")
+            Log.d(TAG, "responseBodyEnd-> byteCount = [$byteCount]")
         }
 
         override fun responseFailed(call: Call, ioe: IOException) {
-            LogUtils.d(TAG, "responseFailed-> ioe = [$ioe]")
+            Log.d(TAG, "responseFailed-> ioe = [$ioe]")
         }
 
         override fun callEnd(call: Call) {
-            LogUtils.d(TAG, "callEnd->")
+            Log.d(TAG, "callEnd->")
         }
 
         override fun callFailed(call: Call, ioe: IOException) {
-            LogUtils.d(TAG, "callFailed-> ioe = [$ioe]")
+            Log.d(TAG, "callFailed-> ioe = [$ioe]")
         }
     }
 
@@ -226,7 +225,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         for (i in 0 until N) {
             // 随机设置请求优先级
             val priority = r.nextInt(20) - 10
-            LogUtils.d(TAG, "$i => $priority")
+            Log.d(TAG, "$i => $priority")
             requests[i] = Request.Builder()
                     .url(URL_FOR_TEST)
                     .tag(TagEntity(i + 1, priority))
@@ -237,7 +236,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         val client = OkHttpClient.Builder().eventListener(object : EventListener() {
             override fun requestHeadersStart(call: Call) {
                 val tag = call.request().tag() as TagEntity?
-                LogUtils.d(TAG, "requestHeadersStart: $tag")
+                Log.d(TAG, "requestHeadersStart: $tag")
             }
         }).build()
         // 设置最大请求数为1，仅为了方便验证

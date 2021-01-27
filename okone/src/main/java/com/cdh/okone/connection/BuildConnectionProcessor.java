@@ -1,8 +1,10 @@
 package com.cdh.okone.connection;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.cdh.okone.connection.callback.PreConnectCallback;
+import com.cdh.okone.util.LogUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -19,6 +21,8 @@ import okio.Timeout;
  * Created by chidehang on 2020/12/22
  */
 public class BuildConnectionProcessor {
+
+    private static final String TAG = "BuildConnectionProcesso";
 
     public static final Call NONE_CALL = new Call() {
         @Override
@@ -72,6 +76,7 @@ public class BuildConnectionProcessor {
         }
 
         if (client.connectionPool().idleConnectionCount() >= 5) {
+            if (LogUtils.isEnabled) LogUtils.d(TAG, "buildConnection: 空闲连接数达到5个");
             // 空闲连接数达到5个
             if (callback != null) {
                 callback.connectFailed(new IllegalStateException("The idle connections reached the upper limit<5>."));
