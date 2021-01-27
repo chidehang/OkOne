@@ -1,6 +1,9 @@
 package com.cdh.okone.connection;
 
+import android.util.Log;
+
 import com.cdh.okone.connection.callback.PreConnectCallback;
+import com.cdh.okone.util.LogUtils;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -27,6 +30,8 @@ import okhttp3.internal.connection.RouteSelector;
  */
 public class PreConnectRunnable implements Runnable {
 
+    private static final String TAG = "PreConnectRunnable";
+
     private static final String THREAD_NAME_PREFIX = "pre-connect-";
 
     private OkHttpClient mClient;
@@ -48,6 +53,7 @@ public class PreConnectRunnable implements Runnable {
     }
 
     private void innerRun() {
+        if (LogUtils.isEnabled) LogUtils.d(TAG, "PreConnectRunnable#innerRun() called");
         try {
             HttpUrl httpUrl = createHttpUrl(mUrl);
             if (httpUrl == null) {
@@ -189,12 +195,14 @@ public class PreConnectRunnable implements Runnable {
     }
 
     private static void callConnectCompleted(PreConnectCallback callback, String url) {
+        if (LogUtils.isEnabled) LogUtils.d(TAG, "callConnectCompleted() called with: callback = [" + callback + "], url = [" + url + "]");
         if (callback != null) {
             callback.connectCompleted(url);
         }
     }
 
     private static void callConnectFailed(PreConnectCallback callback, Throwable t) {
+        if (LogUtils.isEnabled) LogUtils.d(TAG, "callConnectFailed() called with: callback = [" + callback + "], t = [" + t + "]");
         if (callback != null) {
             callback.connectFailed(t);
         }

@@ -33,6 +33,11 @@ android {
     }
 
     buildTypes {
+        debug {
+            minifyEnabled false
+            zipAlignEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -59,7 +64,7 @@ dependencies {
     if (Boolean.parseBoolean(LOCAL_DEBUG)) {
         implementation project(':okone')
     } else {
-        implementation 'com.cdh.okone:okone:0.5.0'
+        implementation 'com.cdh.okone:okone:1.0.0'
     }
 
     api("com.squareup.okhttp3:logging-interceptor:4.9.0")
