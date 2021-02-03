@@ -22,10 +22,15 @@ repositories {
 }
 
 dependencies {
-    compile gradleApi()
-    compile localGroovy()
+    implementation gradleApi()
+    implementation localGroovy()
 
-    compile 'com.android.tools.build:gradle:4.1.1'
-    compile 'org.javassist:javassist:3.22.0-GA'
-    compile 'commons-io:commons-io:2.6'
+    implementation 'com.android.tools.build:gradle:4.1.1'
+    implementation 'org.javassist:javassist:3.22.0-GA'
+    implementation 'commons-io:commons-io:2.6'
+
+    // asm框架
+    implementation 'org.ow2.asm:asm:7.1'
+    implementation 'org.ow2.asm:asm-util:7.1'
+    implementation 'org.ow2.asm:asm-commons:7.1'
 }
