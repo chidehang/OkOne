@@ -6,6 +6,7 @@ import javassist.CtField
 import javassist.CtMethod
 import javassist.NotFoundException
 import javassist.bytecode.AccessFlag
+import plugin.cdh.okone.util.Printer
 
 /**
  * 修改OkHttpClient.Builder
@@ -73,7 +74,7 @@ class ClientBuilderInjector implements IClassInjector {
                     "okhttp3.OkHttpClient\$Builder".equals(method.getReturnType().name) &&
                     !method.name.startsWith("-")) {
                 // 筛选出Builder类中公开给调用方进行自定义配置相关的方法
-                println("filter method name: ${method.name}")
+                Printer.p("filter method name: ${method.name}")
 
                 String src = """{com.cdh.okone.InjectHelper.BuilderHooker.hookBuilderSetConfig(\$0, "${method.name}", \$\$);}"""
                 method.insertBefore(src)

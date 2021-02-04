@@ -14,7 +14,7 @@ import javassist.ClassPath
 import javassist.ClassPool
 import org.apache.commons.codec.digest.DigestUtils
 import org.apache.commons.io.FileUtils
-import org.gradle.jvm.Classpath
+import plugin.cdh.okone.util.Printer
 
 import java.util.jar.JarEntry
 import java.util.jar.JarFile
@@ -48,7 +48,7 @@ class OkOneTransform extends Transform {
 
     @Override
     void transform(TransformInvocation transformInvocation) throws TransformException, InterruptedException, IOException {
-        println(">>> transform OkOneTransform <<<")
+        Printer.p(">>> transform OkOneTransform <<<")
         Collection<TransformInput> inputs = transformInvocation.getInputs()
         TransformOutputProvider outputProvider = transformInvocation.getOutputProvider()
 
@@ -85,7 +85,7 @@ class OkOneTransform extends Transform {
                     // 判断是否是okHttp所在jar
                     hasFoundOkHttp = findTargetJar(jarInput.file, REGEX_OKHTTPCLIENT)
                     if (hasFoundOkHttp) {
-                        println("找到okHttp包")
+                        Printer.p("找到okHttp包")
                         // 添加okHttp的类路径
                         okhttpClassPath = classPool.appendClassPath(jarInput.file.absolutePath)
                         okJarSrc = jarInput.file
@@ -98,7 +98,7 @@ class OkOneTransform extends Transform {
                 if (!skip && !hasFoundOkOne) {
                     hasFoundOkOne = jarName.equals(PROJECT_OKONE) || findTargetJar(jarInput.file, REGEX_OKONE)
                     if (hasFoundOkOne) {
-                        println("找到okone包")
+                        Printer.p("找到okone包")
                         // 添加okone的类路径（注入时需要引用到okone的代码）
                         okoneClassPath = classPool.appendClassPath(jarInput.file.absolutePath)
                     }

@@ -4,11 +4,16 @@ import javassist.ClassPool
 import javassist.CtClass
 import javassist.CtField
 import javassist.NotFoundException
+import org.objectweb.asm.ClassVisitor
+import org.objectweb.asm.ClassWriter
+import org.objectweb.asm.FieldVisitor
+import org.objectweb.asm.MethodVisitor
+import org.objectweb.asm.Opcodes
 
 /**
  * 修改Request类，添加表示优先级的成员变量
  */
-class RequestInjector implements IClassInjector {
+class RequestInjector extends BaseClassInjector {
 
     private static final String TARGET_CLASS_NAME = "Request"
 
@@ -18,34 +23,38 @@ class RequestInjector implements IClassInjector {
     }
 
     @Override
-    File inject(File workDir, ClassPool pool) {
-        CtClass ctClass = pool.get("okhttp3.${TARGET_CLASS_NAME}")
-        if (ctClass.isFrozen()) {
-            ctClass.defrost()
+    ClassVisitor onInject(ClassWriter classWriter) {
+        return new RequestClassVisitor(classWriter)
+    }
+
+    class RequestClassVisitor extends ClassVisitor {
+
+        // 目标成员是否已存在
+        private boolean isFieldPresent
+
+        private final String fieldName = "priority"
+
+        RequestClassVisitor(ClassWriter classWriter) {
+            super(Opcodes.ASM7, classWriter)
         }
 
-        try {
-            // 已经有priority，不再注入
-            ctClass.getDeclaredField("priority")
-            return
-        } catch(NotFoundException e) {
+        @Override
+        FieldVisitor visitField(int access, String name, String descriptor, String signature, Object value) {
+            if (fieldName.equals(name)) {
+                isFieldPresent = true;
+            }
+            return super.visitField(access, name, descriptor, signature, value)
         }
 
-        // 注入priority成员变量
-        String src = "public int priority = 0;"
-        ctClass.addField(CtField.make(src, ctClass))
-
-        // 将修改后的还在内存中的代码重新写入文件
-        ctClass.writeFile(workDir.absolutePath)
-        ctClass.detach()
-
-        // 返回修改后的类文件
-        File injectedFile = new File(workDir.absolutePath +
-                File.separator +
-                "okhttp3" +
-                File.separator +
-                TARGET_CLASS_NAME +
-                ".class")
-        return injectedFile
+        @Override
+        void visitEnd() {
+            if (!isFieldPresent && cv != null) {
+                FieldVisitor fieldVisitor = cv.visitField(Opcodes.ACC_PUBLIC, fieldName, "I", null, null)
+                if (fieldVisitor != null) {
+                    fieldVisitor.visitEnd()
+                }
+            }
+            super.visitEnd()
+        }
     }
 }

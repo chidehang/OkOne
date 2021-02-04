@@ -16,5 +16,5 @@ abstract class BaseClassInjector {
 
     abstract boolean handles(String name)
 
-    abstract ClassVisitor onInject(ClassWriter)
+    abstract ClassVisitor onInject(ClassWriter classWriter)
 }
