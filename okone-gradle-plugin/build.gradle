@@ -26,7 +26,6 @@ dependencies {
     implementation localGroovy()
 
     implementation 'com.android.tools.build:gradle:4.1.1'
-    implementation 'org.javassist:javassist:3.22.0-GA'
     implementation 'commons-io:commons-io:2.6'
 
     // asm框架

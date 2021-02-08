@@ -1,14 +1,10 @@
 package plugin.cdh.okone.inject
 
-import javassist.ClassPool
-import javassist.CtClass
-import javassist.CtMethod
-import javassist.Modifier
+
 import org.objectweb.asm.ClassVisitor
 import org.objectweb.asm.ClassWriter
 import org.objectweb.asm.MethodVisitor
 import org.objectweb.asm.Opcodes
-import plugin.cdh.okone.util.Printer
 
 /**
  * 修改RealCall.AsyncCall

@@ -1,6 +1,5 @@
 package plugin.cdh.okone
 
-import javassist.ClassPool
 import plugin.cdh.okone.inject.AsyncCallInjector
 import plugin.cdh.okone.inject.BaseClassInjector
 import plugin.cdh.okone.inject.ClientBuilderInjector
@@ -14,7 +13,7 @@ import java.util.jar.JarOutputStream
 
 class OkOneInjects {
 
-    static void inject(File srcFile, File destFile, ClassPool pool) {
+    static void inject(File srcFile, File destFile) {
         Printer.p("准备修改okhttp.jar")
 
         // 添加代码注入处理器

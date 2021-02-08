@@ -1,17 +1,7 @@
 package plugin.cdh.okone.inject
 
-import javassist.ClassPool
-import javassist.CtClass
-import javassist.CtField
-import javassist.CtMethod
-import javassist.NotFoundException
-import javassist.bytecode.AccessFlag
-import org.objectweb.asm.ClassVisitor
-import org.objectweb.asm.ClassWriter
-import org.objectweb.asm.FieldVisitor
-import org.objectweb.asm.MethodVisitor
-import org.objectweb.asm.Opcodes
-import org.objectweb.asm.Type
+
+import org.objectweb.asm.*
 import plugin.cdh.okone.util.Const
 import plugin.cdh.okone.util.Printer
 

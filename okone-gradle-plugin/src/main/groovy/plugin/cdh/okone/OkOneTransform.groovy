@@ -10,8 +10,6 @@ import com.android.build.api.transform.TransformInput
 import com.android.build.api.transform.TransformInvocation
 import com.android.build.api.transform.TransformOutputProvider
 import com.android.build.gradle.internal.pipeline.TransformManager
-import javassist.ClassPath
-import javassist.ClassPool
 import org.apache.commons.codec.digest.DigestUtils
 import org.apache.commons.io.FileUtils
 import plugin.cdh.okone.util.Printer
@@ -23,8 +21,6 @@ import java.util.regex.Pattern
 class OkOneTransform extends Transform {
 
     private static final String REGEX_OKHTTPCLIENT = "okhttp3[/.]OkHttpClient.*"
-    private static final String REGEX_OKONE = "com[/.]cdh[/.]okone[/.]OkOne.*"
-    private static final String PROJECT_OKONE = ":okone"
 
     @Override
     String getName() {
@@ -52,15 +48,8 @@ class OkOneTransform extends Transform {
         Collection<TransformInput> inputs = transformInvocation.getInputs()
         TransformOutputProvider outputProvider = transformInvocation.getOutputProvider()
 
-        ClassPool classPool = ClassPool.getDefault()
-        ClassPath okhttpClassPath, okoneClassPath
-
-        File okJarSrc, okJarDest
-
         // 标记是否已找到okhttp所属jar
         boolean hasFoundOkHttp = false;
-        // 标记是否已找到okone
-        boolean hasFoundOkOne = false;
 
         inputs.each { TransformInput input ->
             input.jarInputs.each { JarInput jarInput ->
@@ -86,21 +75,9 @@ class OkOneTransform extends Transform {
                     hasFoundOkHttp = findTargetJar(jarInput.file, REGEX_OKHTTPCLIENT)
                     if (hasFoundOkHttp) {
                         Printer.p("找到okHttp包")
-                        // 添加okHttp的类路径
-                        okhttpClassPath = classPool.appendClassPath(jarInput.file.absolutePath)
-                        okJarSrc = jarInput.file
-                        okJarDest = output
+                        // 执行注入代码
+                        OkOneInjects.inject(jarInput.file, output)
                         skip = true;
-                    }
-                }
-
-                // 处理okone module或jar包
-                if (!skip && !hasFoundOkOne) {
-                    hasFoundOkOne = jarName.equals(PROJECT_OKONE) || findTargetJar(jarInput.file, REGEX_OKONE)
-                    if (hasFoundOkOne) {
-                        Printer.p("找到okone包")
-                        // 添加okone的类路径（注入时需要引用到okone的代码）
-                        okoneClassPath = classPool.appendClassPath(jarInput.file.absolutePath)
                     }
                 }
 
@@ -122,18 +99,6 @@ class OkOneTransform extends Transform {
                 // 拷贝input文件到output路径
                 FileUtils.copyDirectory(directoryInput.file, output)
             }
-        }
-
-        if (okJarSrc && okJarDest) {
-            // 最后执行注入代码（此时已经添加okhttp和okone类路径至ClassPool中）
-            OkOneInjects.inject(okJarSrc, okJarDest, classPool)
-        }
-
-        if (okhttpClassPath) {
-            classPool.removeClassPath(okhttpClassPath)
-        }
-        if (okoneClassPath) {
-            classPool.removeClassPath(okoneClassPath)
         }
     }
 

@@ -1,16 +1,7 @@
 package plugin.cdh.okone.inject
 
-import javassist.ClassPool
-import javassist.CtClass
-import javassist.CtConstructor
-import javassist.CtField
-import javassist.Modifier
-import org.objectweb.asm.ClassVisitor
-import org.objectweb.asm.ClassWriter
-import org.objectweb.asm.FieldVisitor
-import org.objectweb.asm.MethodVisitor
-import org.objectweb.asm.Opcodes
-import plugin.cdh.okone.util.Printer
+
+import org.objectweb.asm.*
 
 /**
  * 修改Dispatcher类
