@@ -4,6 +4,7 @@ import javassist.ClassPool
 import plugin.cdh.okone.inject.AsyncCallInjector
 import plugin.cdh.okone.inject.BaseClassInjector
 import plugin.cdh.okone.inject.ClientBuilderInjector
+import plugin.cdh.okone.inject.DispatcherInjector
 import plugin.cdh.okone.inject.RequestInjector
 import plugin.cdh.okone.util.Printer
 
@@ -21,7 +22,7 @@ class OkOneInjects {
         injectorList.add(new ClientBuilderInjector())
         injectorList.add(new RequestInjector())
         injectorList.add(new AsyncCallInjector())
-//        injectorList.add(new DispatcherInjector())
+        injectorList.add(new DispatcherInjector())
 
         // 创建新的目标产物jar文件
         destFile.createNewFile()

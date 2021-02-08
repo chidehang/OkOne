@@ -43,7 +43,7 @@ class AsyncCallInjector extends BaseClassInjector {
             for (int i=0; i<interfaces.length; i++) {
                 is[i] = interfaces[i]
             }
-            is[is.length-1] = "java.lang.Comparable"
+            is[is.length-1] = "java/lang/Comparable"
 
             super.visit(version, access, name, signature, superName, is)
         }

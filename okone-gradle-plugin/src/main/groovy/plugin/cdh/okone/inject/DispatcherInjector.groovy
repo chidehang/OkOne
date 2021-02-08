@@ -5,51 +5,74 @@ import javassist.CtClass
 import javassist.CtConstructor
 import javassist.CtField
 import javassist.Modifier
+import org.objectweb.asm.ClassVisitor
+import org.objectweb.asm.ClassWriter
+import org.objectweb.asm.FieldVisitor
+import org.objectweb.asm.MethodVisitor
+import org.objectweb.asm.Opcodes
+import plugin.cdh.okone.util.Printer
 
 /**
  * 修改Dispatcher类
  * 给readyAsyncCalls重新赋值
  */
-class DispatcherInjector implements IClassInjector {
+class DispatcherInjector extends BaseClassInjector {
 
-    private static final String TARGET_CLASS_NAME = "Dispatcher"
+    private static final String TARGET_CLASS_NAME = "okhttp3/Dispatcher"
 
     @Override
     boolean handles(String name) {
-        return name.endsWith("okhttp3${File.separator}${TARGET_CLASS_NAME}.class")
+        return name.endsWith("${TARGET_CLASS_NAME}.class")
     }
 
     @Override
-    File inject(File workDir, ClassPool pool) {
-        CtClass ctClass = pool.get("okhttp3.${TARGET_CLASS_NAME}")
-        if (ctClass.isFrozen()) {
-            ctClass.defrost()
+    ClassVisitor onInject(ClassWriter classWriter) {
+        return new DispatcherClassVisitor(classWriter)
+    }
+
+    private static class DispatcherClassVisitor extends ClassVisitor implements Opcodes {
+
+        DispatcherClassVisitor(ClassVisitor classVisitor) {
+            super(Opcodes.ASM7, classVisitor)
         }
 
-        pool.importPackage("com.cdh.okone")
+        @Override
+        FieldVisitor visitField(int access, String name, String descriptor, String signature, Object value) {
+            if ("readyAsyncCalls".equals(name) && "Ljava/util/ArrayDeque;".equals(descriptor)) {
+                // 移除final修饰，使之可以重新赋值
+                access &= ~ACC_FINAL
+            }
+            return super.visitField(access, name, descriptor, signature, value)
+        }
 
-        // 移除final修饰，使之可以重新赋值
-        CtField ctField = ctClass.getDeclaredField("readyAsyncCalls")
-        int modifier = ctField.getModifiers()
-        modifier = modifier & ~Modifier.FINAL
-        ctField.setModifiers(modifier)
+        @Override
+        MethodVisitor visitMethod(int access, String name, String descriptor, String signature, String[] exceptions) {
+            MethodVisitor mv = super.visitMethod(access, name, descriptor, signature, exceptions)
+            if (mv != null) {
+                if ("<init>".equals(name) && "()V".equals(descriptor)) {
+                    // 检索到构造方法
+                    return new ConstructMethodVisitor(mv)
+                }
+            }
+            return mv
+        }
+    }
 
-        // 在构造方法中重新赋值
-        String src = "readyAsyncCalls = com.cdh.okone.InjectHelper.DispatcherHooker.hookReadyAsyncCalls();"
-        CtConstructor ctConstructor = ctClass.getConstructor("()V")
-        ctConstructor.insertAfter(src)
+    private static class ConstructMethodVisitor extends MethodVisitor implements Opcodes {
 
-        // 将修改后的还在内存中的代码重新写入文件
-        ctClass.writeFile(workDir.absolutePath)
-        ctClass.detach()
+        ConstructMethodVisitor(MethodVisitor methodVisitor) {
+            super(Opcodes.ASM7, methodVisitor)
+        }
 
-        // 返回修改后的类文件
-        File injectedFile = new File(workDir.absolutePath +
-                File.separator +
-                "okhttp3" +
-                File.separator +
-                TARGET_CLASS_NAME +
-                ".class")
-        return injectedFile
+        @Override
+        void visitInsn(int opcode) {
+            if ((opcode >= IRETURN && opcode <= RETURN) || opcode == ATHROW) {
+                // 重新计算readyAsyncCalls的赋值
+                mv.visitVarInsn(ALOAD, 0)
+                mv.visitMethodInsn(INVOKESTATIC, "com/cdh/okone/InjectHelper\$DispatcherHooker", "hookReadyAsyncCalls", "()Ljava/util/ArrayDeque;", false)
+                mv.visitFieldInsn(PUTFIELD, TARGET_CLASS_NAME, "readyAsyncCalls", "Ljava/util/ArrayDeque;")
+            }
+            super.visitInsn(opcode)
+        }
     }
 }
