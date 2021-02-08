@@ -32,13 +32,6 @@ class ClientBuilderInjector extends BaseClassInjector {
         return new BuilderClassVisitor(classWriter)
     }
 
-    private static void processEquivalentToMethod(CtClass ctClass) {
-        // 给Builder添加一个equivalentTo方法
-        String src = "public boolean equivalentTo(okhttp3.OkHttpClient\$Builder other) {return com.cdh.okone.InjectHelper.BuilderHooker.injectBuilderEquivalentTo(\$0, other);}"
-        CtMethod method = CtMethod.make(src, ctClass)
-        ctClass.addMethod(method)
-    }
-
     private static class BuilderClassVisitor extends ClassVisitor implements Opcodes {
 
         // 目标成员是否已存在

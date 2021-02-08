@@ -4,12 +4,17 @@ import javassist.ClassPool
 import javassist.CtClass
 import javassist.CtMethod
 import javassist.Modifier
+import org.objectweb.asm.ClassVisitor
+import org.objectweb.asm.ClassWriter
+import org.objectweb.asm.MethodVisitor
+import org.objectweb.asm.Opcodes
+import plugin.cdh.okone.util.Printer
 
 /**
  * 修改RealCall.AsyncCall
  * 添加compare方法
  */
-class AsyncCallInjector implements IClassInjector {
+class AsyncCallInjector extends BaseClassInjector {
 
     private static final String TARGET_CLASS_NAME = "RealCall\$AsyncCall"
 
@@ -19,43 +24,45 @@ class AsyncCallInjector implements IClassInjector {
     }
 
     @Override
-    File inject(File workDir, ClassPool pool) {
-        CtClass ctClass = pool.get("okhttp3.internal.connection.${TARGET_CLASS_NAME}")
-        if (ctClass.isFrozen()) {
-            ctClass.defrost()
+    ClassVisitor onInject(ClassWriter classWriter) {
+        return new AsyncCallClassVisitor(classWriter)
+    }
+
+    private static class AsyncCallClassVisitor extends ClassVisitor implements Opcodes {
+
+        AsyncCallClassVisitor(ClassVisitor classVisitor) {
+            super(Opcodes.ASM7, classVisitor)
         }
 
-        pool.importPackage("com.cdh.okone")
+        @Override
+        void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
+            // AsyncCall原为PRIVATE，外部无法访问，修改访问权限
+            access |= ACC_PUBLIC
+            // 添加Comparable接口
+            String[] is = new String[interfaces.length + 1]
+            for (int i=0; i<interfaces.length; i++) {
+                is[i] = interfaces[i]
+            }
+            is[is.length-1] = "java.lang.Comparable"
 
-        // AsyncCall原为PRIVATE，外部无法访问，修改访问权限
-        ctClass.setModifiers(Modifier.PUBLIC | Modifier.FINAL)
+            super.visit(version, access, name, signature, superName, is)
+        }
 
-        // 添加Comparable接口，实现比较方法
-        ctClass.addInterface(pool.get("java.lang.Comparable"))
-
-        String src = """
-                public int compareTo(java.lang.Object o) {
-                    return com.cdh.okone.InjectHelper.AsyncCallHooker.hookCompareTo(\$0, o);
+        @Override
+        void visitEnd() {
+            if (cv != null) {
+                // 生成compareTo方法
+                MethodVisitor mv = cv.visitMethod(ACC_PUBLIC, "compareTo", "(Ljava/lang/Object;)I", null, null)
+                if (mv != null) {
+                    mv.visitCode()
+                    mv.visitVarInsn(ALOAD, 0)
+                    mv.visitVarInsn(ALOAD, 1)
+                    mv.visitMethodInsn(INVOKESTATIC, "com/cdh/okone/InjectHelper\$AsyncCallHooker", "hookCompareTo", "(Ljava/lang/Object;Ljava/lang/Object;)I", false)
+                    mv.visitInsn(IRETURN)
+                    mv.visitEnd()
                 }
-            """
-        CtMethod ctMethod = CtMethod.make(src, ctClass)
-        ctClass.addMethod(ctMethod)
-
-        // 将修改后的还在内存中的代码重新写入文件
-        ctClass.writeFile(workDir.absolutePath)
-        ctClass.detach()
-
-        // 返回修改后的类文件
-        File injectedFile = new File(workDir.absolutePath +
-                File.separator +
-                "okhttp3" +
-                File.separator +
-                "internal" +
-                File.separator +
-                "connection" +
-                File.separator +
-                TARGET_CLASS_NAME +
-                ".class")
-        return injectedFile
+            }
+            super.visitEnd()
+        }
     }
 }
