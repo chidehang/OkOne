@@ -2,6 +2,7 @@ package plugin.cdh.okone
 
 import javassist.ClassPool
 import plugin.cdh.okone.inject.BaseClassInjector
+import plugin.cdh.okone.inject.ClientBuilderInjector
 import plugin.cdh.okone.inject.RequestInjector
 import plugin.cdh.okone.util.Printer
 
@@ -16,7 +17,7 @@ class OkOneInjects {
 
         // 添加代码注入处理器
         List<BaseClassInjector> injectorList = new LinkedList<>()
-//        injectorList.add(new ClientBuilderInjector())
+        injectorList.add(new ClientBuilderInjector())
         injectorList.add(new RequestInjector())
 //        injectorList.add(new AsyncCallInjector())
 //        injectorList.add(new DispatcherInjector())

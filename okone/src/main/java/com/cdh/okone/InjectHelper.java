@@ -166,7 +166,7 @@ public class InjectHelper {
          */
         private static TreeMap<String, Object[]> findOConfigMapField(OkHttpClient.Builder builder) {
             try {
-                TreeMap<String, Object[]> map = (TreeMap<String, Object[]>) builder.oConfigMap;
+                TreeMap<String, Object[]> map = (TreeMap<String, Object[]>) builder.okone_configMap;
                 return map;
             } catch (Throwable t) {
                 t.printStackTrace();
@@ -190,8 +190,8 @@ public class InjectHelper {
                     RealCall.AsyncCall otherCall = (RealCall.AsyncCall) otherObj;
                     Request self = selfCall.getRequest();
                     Request other = otherCall.getRequest();
-                    int sp = (int) self.priority;
-                    int op = (int) other.priority;
+                    int sp = (int) self.okone_priority;
+                    int op = (int) other.okone_priority;
                     return sp - op;
                 }
             } catch (Throwable t) {

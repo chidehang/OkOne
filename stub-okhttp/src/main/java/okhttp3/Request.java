@@ -5,5 +5,5 @@ package okhttp3;
  */
 public class Request {
 
-    public int priority;
+    public int okone_priority;
 }

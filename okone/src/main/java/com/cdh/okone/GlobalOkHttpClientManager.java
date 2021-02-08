@@ -62,7 +62,7 @@ public class GlobalOkHttpClientManager {
                 while (iterator.hasNext()) {
                     Map.Entry<OkHttpClient.Builder, OkHttpClient> entry = (Map.Entry<OkHttpClient.Builder, OkHttpClient>) iterator.next();
                     // 进行比较
-                    if (builder.equivalentTo(entry.getKey())) {
+                    if (builder.okone_equivalentTo(entry.getKey())) {
                         // 比较结果相等，返回复用实例
                         return entry.getValue();
                     }

@@ -21,7 +21,7 @@ public class RequestPriorityProcessor {
     public static void setRequestPriority(Request request, int priority) {
         if (enableRequestPriority) {
             try {
-                request.priority = priority;
+                request.okone_priority = priority;
             } catch (Throwable t) {
                 LogUtils.printStackTrace(t);
             }
@@ -31,7 +31,7 @@ public class RequestPriorityProcessor {
     public static int getRequestPriority(Request request) {
         if (enableRequestPriority) {
             try {
-                return request.priority;
+                return request.okone_priority;
             } catch (Throwable t) {
                 LogUtils.printStackTrace(t);
             }

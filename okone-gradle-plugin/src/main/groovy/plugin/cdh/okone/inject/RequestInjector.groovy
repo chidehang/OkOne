@@ -9,6 +9,7 @@ import org.objectweb.asm.ClassWriter
 import org.objectweb.asm.FieldVisitor
 import org.objectweb.asm.MethodVisitor
 import org.objectweb.asm.Opcodes
+import plugin.cdh.okone.util.Const
 
 /**
  * 修改Request类，添加表示优先级的成员变量
@@ -27,12 +28,12 @@ class RequestInjector extends BaseClassInjector {
         return new RequestClassVisitor(classWriter)
     }
 
-    class RequestClassVisitor extends ClassVisitor {
+    static class RequestClassVisitor extends ClassVisitor {
 
         // 目标成员是否已存在
         private boolean isFieldPresent
 
-        private final String fieldName = "priority"
+        private final String fieldName = "${Const.GEN_PREFIX}priority"
 
         RequestClassVisitor(ClassWriter classWriter) {
             super(Opcodes.ASM7, classWriter)
@@ -41,9 +42,14 @@ class RequestInjector extends BaseClassInjector {
         @Override
         FieldVisitor visitField(int access, String name, String descriptor, String signature, Object value) {
             if (fieldName.equals(name)) {
-                isFieldPresent = true;
+                isFieldPresent = true
             }
             return super.visitField(access, name, descriptor, signature, value)
+        }
+
+        @Override
+        MethodVisitor visitMethod(int access, String name, String descriptor, String signature, String[] exceptions) {
+            return super.visitMethod(access, name, descriptor, signature, exceptions)
         }
 
         @Override
