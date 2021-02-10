@@ -8,7 +8,7 @@ buildscript {
 }
 
 apply plugin: 'java'
-apply plugin: 'groovy'
+apply plugin: 'kotlin'
 if (Boolean.parseBoolean(PUBLISH_OKONE_GRADLE_PLUGIN)) {
     apply from: 'publish_jcenter.gradle'
 }
@@ -23,7 +23,7 @@ repositories {
 
 dependencies {
     implementation gradleApi()
-    implementation localGroovy()
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
     implementation 'com.android.tools.build:gradle:4.1.1'
     implementation 'commons-io:commons-io:2.6'
