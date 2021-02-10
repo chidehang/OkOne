@@ -230,7 +230,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     .url(URL_FOR_TEST)
                     .tag(TagEntity(i + 1, priority))
                     .build()
-            OkOne.setRequestPriority(requests[i], priority)
+            OkOne.setRequestPriority(requests[i]!!, priority)
         }
 
         val client = OkHttpClient.Builder().eventListener(object : EventListener() {

@@ -89,9 +89,9 @@ public class OkHttpClient {
 
     public class Builder {
 
-        public java.util.TreeMap oConfigMap;
+        public java.util.TreeMap okone_configMap;
 
-        public boolean equivalentTo(OkHttpClient.Builder builder) {
+        public boolean okone_equivalentTo(OkHttpClient.Builder builder) {
             throw new RuntimeException("Stub!");
         }
     }

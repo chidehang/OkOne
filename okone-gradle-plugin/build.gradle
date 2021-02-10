@@ -8,7 +8,7 @@ buildscript {
 }
 
 apply plugin: 'java'
-apply plugin: 'groovy'
+apply plugin: 'kotlin'
 if (Boolean.parseBoolean(PUBLISH_OKONE_GRADLE_PLUGIN)) {
     apply from: 'publish_jcenter.gradle'
 }
@@ -22,10 +22,14 @@ repositories {
 }
 
 dependencies {
-    compile gradleApi()
-    compile localGroovy()
+    implementation gradleApi()
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
-    compile 'com.android.tools.build:gradle:4.1.1'
-    compile 'org.javassist:javassist:3.22.0-GA'
-    compile 'commons-io:commons-io:2.6'
+    implementation 'com.android.tools.build:gradle:4.1.1'
+    implementation 'commons-io:commons-io:2.6'
+
+    // asm框架
+    implementation 'org.ow2.asm:asm:7.1'
+    implementation 'org.ow2.asm:asm-util:7.1'
+    implementation 'org.ow2.asm:asm-commons:7.1'
 }
