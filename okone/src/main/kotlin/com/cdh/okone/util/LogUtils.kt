@@ -15,13 +15,16 @@ object LogUtils {
      */
     private const val MAKE_UPDATE_TIME = "1"
     private const val INDEX = 4
+
     @JvmField
     var isEnabled = true
+
     @JvmStatic
     fun setEnableLog(enable: Boolean) {
         isEnabled = enable
     }
 
+    @JvmStatic
     @JvmOverloads
     fun v(tag: String, msg: String?, deep: Int = INDEX) {
         if (isEnabled) {
@@ -32,6 +35,7 @@ object LogUtils {
     /**
      * 由于华为手机打印不出debug类型的日志，所以所有的Log.d的全部改为Log.i
      */
+    @JvmStatic
     @JvmOverloads
     fun d(tag: String, msg: String?, deep: Int = INDEX) {
         if (isEnabled) {
@@ -39,6 +43,7 @@ object LogUtils {
         }
     }
 
+    @JvmStatic
     @JvmOverloads
     fun i(tag: String, msg: String?, deep: Int = INDEX) {
         if (isEnabled) {
@@ -46,6 +51,7 @@ object LogUtils {
         }
     }
 
+    @JvmStatic
     @JvmOverloads
     fun e(tag: String, msg: String?, deep: Int = INDEX) {
         if (isEnabled) {
@@ -53,6 +59,7 @@ object LogUtils {
         }
     }
 
+    @JvmStatic
     @JvmOverloads
     fun w(tag: String, msg: String?, deep: Int = INDEX) {
         if (isEnabled) {
@@ -60,6 +67,7 @@ object LogUtils {
         }
     }
 
+    @JvmStatic
     @JvmOverloads
     fun e(subTag: String, pMessage: String?, e: Throwable?, deep: Int = INDEX) {
         var pMessage = pMessage
@@ -100,6 +108,7 @@ object LogUtils {
         }
     }
 
+    @JvmStatic
     fun d(tag: String, msg: String?, time: Long) {
         if (isEnabled) {
             Log.i(GLOBAL_TAG, formatMsg(tag, String.format("%s [t1=%d][t2=%d]", msg, time, System.currentTimeMillis() - time), INDEX))

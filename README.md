@@ -27,7 +27,7 @@ okhttp的请求队列和连接池等控制和优化措施。
 - 1.在项目根目录的build.gradle里添加依赖
 ```
 dependencies {
-    classpath 'com.cdh.okone:gradle:1.0.0'
+    classpath 'com.cdh.okone:gradle:2.0.0'
 }
 ```
 
@@ -38,7 +38,7 @@ apply plugin: 'plugin.cdh.okone'
 
 - 3.在app module的build.gradle的dependencies里添加依赖
 ```
-implementation 'com.cdh.okone:okone:1.0.0'
+implementation 'com.cdh.okone:okone:2.0.1'
 ```
 
 至此已完成接入，后续直接打包apk运行即可。

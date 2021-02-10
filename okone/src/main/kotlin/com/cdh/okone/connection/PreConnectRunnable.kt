@@ -86,8 +86,8 @@ class PreConnectRunnable(
         private const val TAG = "PreConnectRunnable"
         private const val THREAD_NAME_PREFIX = "pre-connect-"
 
-        private fun createHttpUrl(url: String): HttpUrl? {
-            var url = url
+        private fun createHttpUrl(oriUrl: String): HttpUrl? {
+            var url = oriUrl
             if (url.regionMatches(0, "ws:", 0, 3, ignoreCase = true)) {
                 url = "http:" + url.substring(3)
             } else if (url.regionMatches(0, "wss:", 0, 4, ignoreCase = true)) {
