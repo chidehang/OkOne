@@ -1,20 +1,13 @@
 package com.cdh.okone;
 
-import android.util.Log;
-
 import com.cdh.okone.priority.PriorityArrayDeque;
 import com.cdh.okone.priority.RequestPriorityProcessor;
 import com.cdh.okone.util.LogUtils;
 
-import java.lang.reflect.Field;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Deque;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -57,7 +50,7 @@ public class InjectHelper {
          * 记录配置项
          */
         private static void recordBuilderConfig(OkHttpClient.Builder builder, String methodName, Object... args) {
-            if (LogUtils.isEnabled) LogUtils.d(TAG, "recordBuilderConfig() called with: builder = [" + builder + "], methodName = [" + methodName + "], args = [" + Arrays.toString(args) + "]");
+            if (LogUtils.isEnabled) LogUtils.INSTANCE.d(TAG, "recordBuilderConfig() called with: builder = [" + builder + "], methodName = [" + methodName + "], args = [" + Arrays.toString(args) + "]");
             try {
                 // 获取oConfigMap成员，用于存储配置项
                 TreeMap<String, Object[]> map = findOConfigMapField(builder);
@@ -178,7 +171,7 @@ public class InjectHelper {
          * hook Builder#build方法
          */
         public static OkHttpClient hookBuildOkHttpClient(OkHttpClient.Builder builder) {
-            return GlobalOkHttpClientManager.getInstance().buildOkHttpClient(builder);
+            return GlobalOkHttpClientManager.Companion.getInstance().buildOkHttpClient(builder);
         }
     }
 

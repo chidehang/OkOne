@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
 if (Boolean.parseBoolean(PUBLISH_OKONE_LIB)) {
     apply from: 'publish_jcenter.gradle'
 }
@@ -30,7 +31,6 @@ android {
 }
 
 dependencies {
-//    api 'com.squareup.okhttp3:okhttp:4.9.0'
     compileOnly project(':stub-okhttp')
     compileOnly 'com.squareup.okio:okio:2.8.0'
 }
