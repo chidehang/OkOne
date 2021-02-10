@@ -6,7 +6,7 @@
 库间各自创建OkHttpClient实例，或有开发者未通过单例缓存OkHttpClient，而是每次请求每次新建，这样将造成浪费并且导致不能充分利用
 okhttp的请求队列和连接池等控制和优化措施。
 
-借助该OkOne库可以**无侵入**地将分散在不同组件中的OkHttpClient进行收敛，由OkOne进行统一复用和管理。OkOne会比较OkHttpClient.Builder
+借助该OkOne库可以**无侵入、无感知**地将分散在不同组件中的OkHttpClient进行收敛，由OkOne进行统一复用和管理。OkOne会比较OkHttpClient.Builder
 进行区分复用，即相同配置的OkHttpClient.Builder将自动复用同一个OkHttpClient实例。
 
 
@@ -82,6 +82,7 @@ OkOne.preBuildConnection(okHttpClient, url, new PreConnectCallback() {
 
 #### 请求优先级
 支持给请求Request设置优先级，尽可能让高优先级请求任务先发起。
+
 **优先级范围[-10,10]，默认值0，值越大优先级越高。**
 
 - 1. 启用请求优先级功能（默认关闭）
