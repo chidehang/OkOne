@@ -14,9 +14,11 @@ object OkOne {
     /**
      * 是否启用全局统一OkHttpClient
      */
+    @JvmStatic
     @Volatile
     var useGlobalClient = true
 
+    @JvmStatic
     fun setLogEnable(enable: Boolean) {
         setEnableLog(enable)
     }
@@ -24,6 +26,7 @@ object OkOne {
     /**
      * 预建连
      */
+    @JvmStatic
     fun preBuildConnection(client: OkHttpClient?, url: String?, callback: PreConnectCallback?) {
         buildConnection(client, url, callback)
     }
@@ -31,6 +34,7 @@ object OkOne {
     /**
      * 是否启用请求优先级
      */
+    @JvmStatic
     fun enableRequestPriority(enable: Boolean) {
         RequestPriorityProcessor.enableRequestPriority = enable
     }
@@ -39,6 +43,7 @@ object OkOne {
      * 设置请求的优先级[-10~10]
      * 数值越大优先级越高
      */
+    @JvmStatic
     fun setRequestPriority(request: Request, priority: Int) {
         RequestPriorityProcessor.setRequestPriority(request, priority)
     }
@@ -46,6 +51,7 @@ object OkOne {
     /**
      * 获取请求的优先级，默认0
      */
+    @JvmStatic
     fun getRequestPriority(request: Request): Int {
         return RequestPriorityProcessor.getRequestPriority(request)
     }
