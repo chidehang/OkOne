@@ -9,7 +9,7 @@ buildscript {
 
 apply plugin: 'java'
 apply plugin: 'kotlin'
-if (Boolean.parseBoolean(PUBLISH_OKONE_GRADLE_PLUGIN)) {
+if (Boolean.parseBoolean(PUBLISH_OKONE_LIB)) {
     apply from: 'publish_jcenter.gradle'
 }
 apply from: 'publish_local_maven.gradle'

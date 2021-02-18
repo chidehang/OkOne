@@ -2,7 +2,7 @@
 apply plugin: 'com.github.panpf.bintray-publish'
 
 ext {
-    PUBLISH_VERSION = V_OKONE_GRADLE_PLUGIN
+    PUBLISH_VERSION = V_OKONE_LIB
 }
 
 publish {

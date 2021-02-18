@@ -1,7 +1,7 @@
 apply plugin: 'maven'
 
 ext {
-    PUBLISH_VERSION = V_OKONE_GRADLE_PLUGIN + "-beta"
+    PUBLISH_VERSION = V_OKONE_LIB + "-beta"
 }
 
 // maven配置
