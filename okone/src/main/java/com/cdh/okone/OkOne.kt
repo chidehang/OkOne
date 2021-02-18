@@ -2,8 +2,10 @@ package com.cdh.okone
 
 import com.cdh.okone.connection.BuildConnectionProcessor.buildConnection
 import com.cdh.okone.connection.callback.PreConnectCallback
+import com.cdh.okone.monitor.MonitorRegistry
 import com.cdh.okone.priority.RequestPriorityProcessor
 import com.cdh.okone.util.LogUtils.setEnableLog
+import okhttp3.EventListener
 import okhttp3.OkHttpClient
 import okhttp3.Request
 
@@ -14,7 +16,7 @@ object OkOne {
     /**
      * 是否启用全局统一OkHttpClient
      */
-    @JvmStatic
+    @JvmField
     @Volatile
     var useGlobalClient = true
 
@@ -54,5 +56,13 @@ object OkOne {
     @JvmStatic
     fun getRequestPriority(request: Request): Int {
         return RequestPriorityProcessor.getRequestPriority(request)
+    }
+
+    /**
+     * 设置全局EventListener
+     */
+    @JvmStatic
+    fun setGlobalEventListener(eventListener: EventListener?) {
+        MonitorRegistry.hostEventListener = eventListener
     }
 }

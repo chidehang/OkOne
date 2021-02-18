@@ -26,4 +26,5 @@ android {
 
 dependencies {
     compileOnly 'com.squareup.okio:okio:2.8.0'
+    compileOnly 'com.squareup.okhttp3:okhttp:4.9.0'
 }

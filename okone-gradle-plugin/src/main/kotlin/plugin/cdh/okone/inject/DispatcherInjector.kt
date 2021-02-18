@@ -44,7 +44,7 @@ class DispatcherInjector : BaseClassInjector() {
             methodVisitor: MethodVisitor
     ) : MethodVisitor(Opcodes.ASM7, methodVisitor) {
         override fun visitInsn(opcode: Int) {
-            if ((opcode >= IRETURN && opcode <= RETURN) || opcode == ATHROW) {
+            if ((opcode in IRETURN..RETURN) || opcode == ATHROW) {
                 // 重新计算readyAsyncCalls的赋值
                 mv.apply {
                     visitVarInsn(ALOAD, 0)

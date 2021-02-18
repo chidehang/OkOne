@@ -1,12 +1,15 @@
 package com.cdh.okone
 
+import com.cdh.okone.monitor.GlobalEventListenerFactory
 import com.cdh.okone.priority.PriorityArrayDeque
 import com.cdh.okone.priority.RequestPriorityProcessor
 import com.cdh.okone.util.LogUtils
 import com.cdh.okone.util.LogUtils.d
+import okhttp3.EventListener
 import okhttp3.OkHttpClient
 import okhttp3.internal.connection.RealCall
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Created by chidehang on 2021/2/10
@@ -192,6 +195,13 @@ object InjectHelper {
             } else {
                 ArrayDeque()
             }
+        }
+    }
+
+    object ClientHooker {
+        @JvmStatic
+        fun hookEventListenerFactory(source: EventListener.Factory): EventListener.Factory {
+            return GlobalEventListenerFactory(source)
         }
     }
 }

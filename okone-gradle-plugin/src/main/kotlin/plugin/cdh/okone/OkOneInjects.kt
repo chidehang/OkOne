@@ -20,10 +20,11 @@ class OkOneInjects {
 
             // 添加代码注入处理器
             val injectorList = LinkedList<BaseClassInjector>()
+            injectorList.add(DispatcherInjector())
+            injectorList.add(AsyncCallInjector())
             injectorList.add(ClientBuilderInjector())
             injectorList.add(RequestInjector())
-            injectorList.add(AsyncCallInjector())
-            injectorList.add(DispatcherInjector())
+            injectorList.add(OkHttpClientInjector())
 
             // 创建新的目标产物jar文件
             destFile.createNewFile()
