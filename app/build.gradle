@@ -1,17 +1,22 @@
-//buildscript {
-//    repositories {
-//        mavenLocal()
-//        google()
-//        mavenCentral()
-//        jcenter()
-//        maven {//本地Maven仓库地址
-//            url uri('../repos')
-//        }
-//    }
-//    dependencies {
-//        classpath 'com.cdh.okone:gradle:1.0.0-beta'
-//    }
-//}
+buildscript {
+    repositories {
+        mavenLocal()
+        google()
+        mavenCentral()
+        jcenter()
+        if (Boolean.parseBoolean(LOCAL_DEBUG)) {
+            maven {
+                //本地Maven仓库地址
+                url uri('../repos')
+            }
+        }
+    }
+    dependencies {
+        if (Boolean.parseBoolean(LOCAL_DEBUG)) {
+            classpath 'com.cdh.okone:gradle:2.1.0-beta'
+        }
+    }
+}
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
@@ -64,7 +69,7 @@ dependencies {
     if (Boolean.parseBoolean(LOCAL_DEBUG)) {
         implementation project(':okone')
     } else {
-        implementation 'com.cdh.okone:okone:2.0.1'
+        implementation 'com.cdh.okone:okone:2.1.0'
     }
 
     api("com.squareup.okhttp3:logging-interceptor:4.9.0")
