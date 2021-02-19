@@ -36,7 +36,6 @@ public class OkOneConfigur {
         OkOne.enableRequestPriority(true);
         // 设置全局EventListener
         OkOne.setGlobalEventListener(new EventListener() {
-
             private static final String TAG = "GlobalEventListener";
 
             @Override
@@ -184,6 +183,5 @@ public class OkOneConfigur {
                 Log.d(TAG, "secureConnectStart: call = [" + call + "]");
             }
         });
-        OkOne.setGlobalEventListener(null);
     }
 }

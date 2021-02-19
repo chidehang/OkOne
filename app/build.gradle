@@ -69,7 +69,7 @@ dependencies {
     if (Boolean.parseBoolean(LOCAL_DEBUG)) {
         implementation project(':okone')
     } else {
-        implementation 'com.cdh.okone:okone:2.0.1'
+        implementation 'com.cdh.okone:okone:2.1.0'
     }
 
     api("com.squareup.okhttp3:logging-interceptor:4.9.0")

@@ -17,7 +17,7 @@ buildscript {
 
         if (!Boolean.parseBoolean(LOCAL_DEBUG)) {
             // okone gradle plugin
-            classpath 'com.cdh.okone:gradle:2.0.0'
+            classpath 'com.cdh.okone:gradle:2.1.0'
         }
 
         // NOTE: Do not place your application dependencies here; they belong
