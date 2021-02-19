@@ -9,14 +9,7 @@ okhttp的请求队列和连接池等控制和优化措施。
 借助该OkOne库可以**无侵入、无感知**地将分散在不同组件中的OkHttpClient进行收敛，由OkOne进行统一复用和管理。OkOne会比较OkHttpClient.Builder
 进行区分复用，即相同配置的OkHttpClient.Builder将自动复用同一个OkHttpClient实例。
 
-
-除此之外，OkOne还提供了其他扩展的高级功能，更详细的介绍可以查看相关博文：
-
-[《OkOne-基于okhttp的网络性能优化框架》](https://juejin.cn/post/6908178914779561997)
-
-[《OkOne-高级功能之OkHttp预建连以及原理剖析》](https://juejin.cn/post/6909817749493514247)
-
-[《OkOne-如何给okhttp的请求设置优先级》](https://juejin.cn/post/6920850276437983239/)
+除此之外，OkOne还提供了其他扩展的高级功能，更多详细介绍可以[查看相关博文](#blog)。
 
 ## 快速集成
 
@@ -108,3 +101,10 @@ OkOne.setGlobalEventListener(mTrackEventListener);
 ## 更新日志
 [Change Log](https://github.com/chidehang/OkOne/wiki/Change-Log)
 
+## BLOG
+
+[《OkOne-基于okhttp的网络性能优化框架》](https://juejin.cn/post/6908178914779561997)
+
+[《OkOne-高级功能之OkHttp预建连以及原理剖析》](https://juejin.cn/post/6909817749493514247)
+
+[《OkOne-如何给okhttp的请求设置优先级》](https://juejin.cn/post/6920850276437983239/)
