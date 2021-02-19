@@ -37,27 +37,27 @@ implementation 'com.cdh.okone:okone:2.1.0'
 至此已完成接入，后续直接打包apk运行即可。
 
 ## 高级功能
-#### 关闭开关
+### 关闭开关
 是否启用或关闭OkHttpClient统一复用和管理，需要在创建OkHttpClient前设置。
 ```
 // true启用，false关闭。默认true。
 OkOne.useGlobalClient = true;
 ```
 
-#### 打印日志
+### 打印日志
 打开或关闭OkOne打印日志。
 ```
 // true打印，false不打印。默认true。
 OkOne.setLogEnable(true);
 ```
 
-#### 单独创建不受控的OkHttpClient实例
+### 单独创建不受控的OkHttpClient实例
 单独创建一个不经OkOne管理和复用的OkHttpClient。
 ```
 OkHttpClient client = new OkHttpClient(builder); 
 ```
 
-#### 预建连
+### 预建连
 开发者可以在合适的时机提前建立连接，若连接成功则添加进okhttp连接池。
 ```
 OkOne.preBuildConnection(okHttpClient, url, new PreConnectCallback() {
@@ -73,7 +73,7 @@ OkOne.preBuildConnection(okHttpClient, url, new PreConnectCallback() {
 });
 ```
 
-#### 请求优先级
+### 请求优先级
 支持给请求Request设置优先级，尽可能让高优先级请求任务先发起。
 **优先级范围[-10,10]，默认值0，值越大优先级越高。**
 
@@ -89,7 +89,7 @@ Request request = Request.Builder().url(URL_FOR_TEST).build();
 OkOne.setRequestPriority(request, priority);
 ```
 
-#### 全局EventListener
+### 全局EventListener
 支持设置全局EventListener用于监控通过OkHttp发起的网络请求。
 设置包括**主module、子module、三方库**在内的所有OkHttpClient，但不影响业务方原先配置的EventListener和EventListener.Factory。
 
