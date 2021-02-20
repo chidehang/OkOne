@@ -22,7 +22,9 @@ class OkHttpClientInjector : BaseClassInjector() {
     ) : ClassVisitor(Opcodes.ASM7, classVisitor) {
 
         override fun visitField(access: Int, name: String, descriptor: String, signature: String?, value: Any?): FieldVisitor {
-            if (name == "eventListenerFactory" && "Lokhttp3/EventListener\$Factory;" == descriptor) {
+            if ((name == "eventListenerFactory" && "Lokhttp3/EventListener\$Factory;" == descriptor) ||
+                    (name == "interceptors" && descriptor == "Ljava/util/List;") ||
+                    (name == "networkInterceptors" && descriptor == "Ljava/util/List;")) {
                 // 移除final修饰，使之可以重新赋值
                 access.and(ACC_FINAL.inv())
             }
@@ -46,13 +48,28 @@ class OkHttpClientInjector : BaseClassInjector() {
     ) : MethodVisitor(Opcodes.ASM7, methodVisitor) {
         override fun visitInsn(opcode: Int) {
             if ((opcode in IRETURN..RETURN) || opcode == ATHROW) {
-                // 在方法结尾处给eventListenerFactory重新赋值
+                // 在方法结尾处修改
                 mv.apply {
+                    // hook eventListenerFactory
                     visitVarInsn(ALOAD, 0)
                     visitVarInsn(ALOAD, 0)
                     visitFieldInsn(GETFIELD, TARGET_CLASS_NAME, "eventListenerFactory", "Lokhttp3/EventListener\$Factory;")
                     visitMethodInsn(INVOKESTATIC, "com/cdh/okone/InjectHelper\$ClientHooker", "hookEventListenerFactory", "(Lokhttp3/EventListener\$Factory;)Lokhttp3/EventListener\$Factory;", false)
                     visitFieldInsn(PUTFIELD, TARGET_CLASS_NAME, "eventListenerFactory", "Lokhttp3/EventListener\$Factory;")
+
+                    // hook interceptors
+                    visitVarInsn(ALOAD, 0)
+                    visitVarInsn(ALOAD, 0)
+                    visitFieldInsn(GETFIELD, TARGET_CLASS_NAME, "interceptors", "Ljava/util/List;")
+                    visitMethodInsn(INVOKESTATIC, "com/cdh/okone/InjectHelper\$ClientHooker", "hookInterceptors", "(Ljava/util/List;)Ljava/util/List;", false)
+                    visitFieldInsn(PUTFIELD, TARGET_CLASS_NAME, "interceptors", "Ljava/util/List;")
+
+                    // hook networkInterceptors
+                    visitVarInsn(ALOAD, 0)
+                    visitVarInsn(ALOAD, 0)
+                    visitFieldInsn(GETFIELD, TARGET_CLASS_NAME, "networkInterceptors", "Ljava/util/List;")
+                    visitMethodInsn(INVOKESTATIC, "com/cdh/okone/InjectHelper\$ClientHooker", "hookNetworkInterceptors", "(Ljava/util/List;)Ljava/util/List;", false)
+                    visitFieldInsn(PUTFIELD, TARGET_CLASS_NAME, "networkInterceptors", "Ljava/util/List;")
                 }
             }
             super.visitInsn(opcode)

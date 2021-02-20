@@ -12,7 +12,7 @@ class GlobalEventListenerFactory(
 
     override fun create(call: Call?): EventListener {
         // 全局拦截设置的EventListener
-        val host = MonitorRegistry.hostEventListener
+        val host = MonitorRegistry.globalEventListener
         // 业务方设置的原始EventListener
         val source = delegate.create(call)
         return if (host == null) {

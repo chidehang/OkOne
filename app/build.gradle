@@ -13,7 +13,7 @@ buildscript {
     }
     dependencies {
         if (Boolean.parseBoolean(LOCAL_DEBUG)) {
-            classpath 'com.cdh.okone:gradle:2.1.0-beta'
+            classpath 'com.cdh.okone:gradle:2.2.0-beta'
         }
     }
 }
@@ -69,7 +69,7 @@ dependencies {
     if (Boolean.parseBoolean(LOCAL_DEBUG)) {
         implementation project(':okone')
     } else {
-        implementation 'com.cdh.okone:okone:2.1.0'
+        implementation 'com.cdh.okone:okone:2.2.0'
     }
 
     api("com.squareup.okhttp3:logging-interceptor:4.9.0")
