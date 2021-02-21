@@ -1,11 +1,13 @@
 package com.cdh.okone
 
 import com.cdh.okone.monitor.GlobalEventListenerFactory
+import com.cdh.okone.monitor.MonitorRegistry
 import com.cdh.okone.priority.PriorityArrayDeque
 import com.cdh.okone.priority.RequestPriorityProcessor
 import com.cdh.okone.util.LogUtils
 import com.cdh.okone.util.LogUtils.d
 import okhttp3.EventListener
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.internal.connection.RealCall
 import java.util.*
@@ -202,6 +204,18 @@ object InjectHelper {
         @JvmStatic
         fun hookEventListenerFactory(source: EventListener.Factory): EventListener.Factory {
             return GlobalEventListenerFactory(source)
+        }
+
+        @JvmStatic
+        fun hookInterceptors(source: List<Interceptor>): List<Interceptor> {
+            // 添加全局Interceptor
+            return source + MonitorRegistry.globalInterceptors
+        }
+
+        @JvmStatic
+        fun hookNetworkInterceptors(source: List<Interceptor>): List<Interceptor> {
+            // 添加全局NetworkInterceptor
+            return source + MonitorRegistry.globalNetworkInterceptors
         }
     }
 }

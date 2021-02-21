@@ -10,6 +10,7 @@
    * [预建连](#预建连)
    * [请求优先级](#请求优先级)
    * [全局EventListener](#全局EventListener)
+   * [全局拦截器](#全局拦截器)
 * [更新日志](#更新日志)
 * [BLOG](#BLOG)
 
@@ -109,6 +110,17 @@ OkOne.setRequestPriority(request, priority);
 ```
 // 设置全局EventListener
 OkOne.setGlobalEventListener(mTrackEventListener);
+```
+
+### 全局拦截器
+支持添加全局Interceptor和NetworkInterceptor用于拦截通过OkHttp发起的网络请求。
+设置包括**主module、子module、三方库**在内的所有OkHttpClient，但不影响业务方原先配置的Interceptor和NetworkInterceptor。
+```
+// 添加全局Interceptor
+OkOne.addGlobalInterceptor(mGlobalInterceptor);
+
+// 添加全局NetworkInterceptor
+OkOne.addGlobalNetworkInterceptor(mGlobalNetworkInterceptor);
 ```
 
 ## 更新日志

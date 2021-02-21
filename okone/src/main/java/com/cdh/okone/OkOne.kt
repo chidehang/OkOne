@@ -6,6 +6,7 @@ import com.cdh.okone.monitor.MonitorRegistry
 import com.cdh.okone.priority.RequestPriorityProcessor
 import com.cdh.okone.util.LogUtils.setEnableLog
 import okhttp3.EventListener
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
 
@@ -63,6 +64,22 @@ object OkOne {
      */
     @JvmStatic
     fun setGlobalEventListener(eventListener: EventListener?) {
-        MonitorRegistry.hostEventListener = eventListener
+        MonitorRegistry.globalEventListener = eventListener
+    }
+
+    /**
+     * 添加全局Interceptor
+     */
+    @JvmStatic
+    fun addGlobalInterceptor(interceptor: Interceptor) {
+        MonitorRegistry.globalInterceptors.add(interceptor)
+    }
+
+    /**
+     * 添加全局Interceptor
+     */
+    @JvmStatic
+    fun addGlobalNetworkInterceptor(interceptor: Interceptor) {
+        MonitorRegistry.globalNetworkInterceptors.add(interceptor)
     }
 }

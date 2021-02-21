@@ -23,6 +23,7 @@ import okhttp3.HttpUrl;
 import okhttp3.Protocol;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.logging.HttpLoggingInterceptor;
 
 /**
  * Created by chidehang on 2021/2/18
@@ -183,5 +184,27 @@ public class OkOneConfigur {
                 Log.d(TAG, "secureConnectStart: call = [" + call + "]");
             }
         });
+
+        // 添加全局拦截器
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
+            private static final String TAG = "GlobalInterceptor";
+            @Override
+            public void log(@NotNull String s) {
+                Log.d(TAG, s);
+            }
+        });
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
+        OkOne.addGlobalInterceptor(interceptor);
+
+        // 添加全局拦截器
+        HttpLoggingInterceptor networkInterceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
+            private static final String TAG = "GlobalNetwork";
+            @Override
+            public void log(@NotNull String s) {
+                Log.d(TAG, s);
+            }
+        });
+        networkInterceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
+        OkOne.addGlobalNetworkInterceptor(networkInterceptor);
     }
 }
