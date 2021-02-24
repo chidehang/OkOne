@@ -69,6 +69,7 @@ public class OkOneTest {
 
     @Before
     public void configOkOne() {
+        OkOne.setLogEnable(true);
         OkOne.useGlobalClient = true;
         OkOne.enableRequestPriority(true);
     }
@@ -89,6 +90,13 @@ public class OkOneTest {
     }
 
     @Test
+    public void reuseOkHttpClient2() {
+        OkHttpClient client1 = createBuilder3().build();
+        OkHttpClient client2 = createBuilder3().build();
+        assertSame(client1, client2);
+    }
+
+    @Test
     public void differentOkHttpClientBuilder() {
         OkHttpClient client1 = createBuilder1().build();
         OkHttpClient client2 = createBuilder2().build();
@@ -99,18 +107,15 @@ public class OkOneTest {
     public void differentOkHttpClientBuilder2() {
         OkHttpClient.Builder builder1 = createBuilder1().readTimeout(11, TimeUnit.SECONDS);
         OkHttpClient.Builder builder2 = createBuilder1().readTimeout(12, TimeUnit.SECONDS);
-
-        TreeMap map1;
-        TreeMap map2;
-        try {
-            map1 = (TreeMap) builder1.getClass().getDeclaredField("okone_configMap").get(builder1);
-            map2 = (TreeMap) builder2.getClass().getDeclaredField("okone_configMap").get(builder2);
-        } catch (Throwable t) {
-            t.printStackTrace();
-        }
-
         OkHttpClient client1 = builder1.build();
         OkHttpClient client2 = builder2.build();
+        assertNotSame(client1, client2);
+    }
+
+    @Test
+    public void differentOkHttpClientBuilder3() {
+        OkHttpClient client1 = createBuilder1().retryOnConnectionFailure(false).build();
+        OkHttpClient client2 = createBuilder2().retryOnConnectionFailure(true).build();
         assertNotSame(client1, client2);
     }
 
