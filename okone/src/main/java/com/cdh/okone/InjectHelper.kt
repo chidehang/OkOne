@@ -6,6 +6,7 @@ import com.cdh.okone.priority.PriorityArrayDeque
 import com.cdh.okone.priority.RequestPriorityProcessor
 import com.cdh.okone.util.LogUtils
 import com.cdh.okone.util.LogUtils.d
+import com.cdh.okone.util.TypeUtils.isPrimitiveOrString
 import okhttp3.EventListener
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -99,6 +100,10 @@ object InjectHelper {
             if (selfMap == null || otherMap == null) {
                 return false
             }
+
+            d(TAG, "selfMap = $selfMap")
+            d(TAG, "otherMap = $otherMap")
+
             if (selfMap.size == 0 && otherMap.size == 0) {
                 // 未对Builder自定义配置
                 return true
@@ -114,19 +119,24 @@ object InjectHelper {
             while (selfIter.hasNext() && otherIter.hasNext()) {
                 val selfEntry = selfIter.next() as Map.Entry<String, Array<*>?>
                 val otherEntry = otherIter.next() as Map.Entry<String, Array<*>?>
+                d(TAG, "开始比较配置项: ${selfEntry.key}和${otherEntry.key}")
                 if (selfEntry.key != otherEntry.key) {
                     // 方法名称不同
+                    d(TAG, "fail: ${selfEntry.key} != ${otherEntry.key}")
                     return false
                 }
 
                 val otherObjs = otherEntry.value
                 if (selfEntry.value === otherObjs) {
+                    d(TAG, "pass: ${selfEntry.value} === ${otherEntry.value}")
                     continue
                 }
                 if (selfEntry.value == null || otherObjs == null) {
+                    d(TAG, "fail: 存在一个null ${selfEntry.value} , ${otherEntry.value}")
                     return false
                 }
                 if (selfEntry.value!!.size != otherObjs.size) {
+                    d(TAG, "fail: 属性个数不同 ${selfEntry.value!!.size} != ${otherObjs.size}")
                     return false
                 }
 
@@ -134,19 +144,30 @@ object InjectHelper {
                 for (i in otherObjs.indices) {
                     val obj1 = selfEntry.value!![i]
                     val obj2 = otherObjs[i]
+                    d(TAG, "开始比较属性项: ${obj1}和${obj2}")
                     if (obj1 === obj2) {
+                        d(TAG, "pass: $obj1 === $obj2")
                         continue
                     }
                     if (obj1 == null || obj2 == null) {
+                        d(TAG, "fail: 存在一个null $obj1 , $obj2")
                         return false
                     }
                     if (obj1 == obj2) {
+                        d(TAG, "pass: $obj1 == $obj2")
                         continue
-                    }
-                    if (obj1.javaClass.name != obj2.javaClass.name) {
-                        // 比较是否是同一个类（可以是不同实例）
+                    } else if (isPrimitiveOrString(obj1) || isPrimitiveOrString(obj2)) {
+                        d(TAG, "fail: $obj1 != $obj2")
                         return false
                     }
+
+                    if (obj1.javaClass.name != obj2.javaClass.name) {
+                        // 比较是否是同一个类（可以是不同实例）
+                        d(TAG, "fail: ${obj1.javaClass.name} != ${obj2.javaClass.name}")
+                        return false
+                    }
+
+                    d(TAG, "pass: 无不符合的条件")
                 }
             }
             return true
