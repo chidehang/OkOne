@@ -8,7 +8,7 @@ buildscript {
     }
 
     ext.kotlin_version = '1.3.72'
-    ext.okoneVersion = '2.2.1'
+    ext.okoneVersion = '2.3.0-rc'
 
     dependencies {
         classpath "com.android.tools.build:gradle:4.1.1"

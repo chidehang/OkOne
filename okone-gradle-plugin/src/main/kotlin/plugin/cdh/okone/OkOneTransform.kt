@@ -2,10 +2,11 @@ package plugin.cdh.okone
 
 import com.android.build.api.transform.*
 import com.android.build.gradle.internal.pipeline.TransformManager
-import com.android.utils.FileUtils
 import org.apache.commons.codec.digest.DigestUtils
+import org.apache.commons.io.FileUtils
 import plugin.cdh.okone.util.Printer
 import java.io.File
+import java.io.IOException
 import java.util.jar.JarFile
 import java.util.regex.Pattern
 
@@ -23,68 +24,123 @@ class OkOneTransform : Transform() {
     }
 
     override fun isIncremental(): Boolean {
-        return false
+        return true
     }
 
     override fun getScopes(): MutableSet<in QualifiedContent.Scope> {
         return TransformManager.SCOPE_FULL_PROJECT
     }
 
-    override fun transform(transformInvocation: TransformInvocation?) {
+    override fun transform(transformInvocation: TransformInvocation) {
         Printer.p(">>> transform OkOneTransform <<<")
-        val inputs: Collection<TransformInput> = transformInvocation!!.inputs
+        Printer.p("support incremental = ${transformInvocation.isIncremental}")
+
+        if (!transformInvocation.isIncremental) {
+            transformInvocation.outputProvider.deleteAll()
+        }
+
+        val inputs: Collection<TransformInput> = transformInvocation.inputs
         val outputProvider: TransformOutputProvider = transformInvocation.outputProvider
 
         // 标记是否已找到okhttp所属jar
         var hasFoundOkHttp = false
 
         inputs.forEach {
-            it.jarInputs.forEach {
-                var jarName = it.name
+            it.jarInputs.forEach { input: JarInput ->
+                var jarName = input.name
                 if (jarName.endsWith(".jar")) {
                     jarName = jarName.substring(0, jarName.length-4)
                 }
-                val md5Str = DigestUtils.md5Hex(it.file.absolutePath)
+                val md5Str = DigestUtils.md5Hex(input.file.absolutePath)
                 val output = outputProvider.getContentLocation(
                         jarName + md5Str,
-                        it.contentTypes,
-                        it.scopes,
+                        input.contentTypes,
+                        input.scopes,
                         Format.JAR
                 )
 
-                // 标记当前jar是否是okhttp
-                var skip = false
-
-                if (!hasFoundOkHttp) {
-                    // 判断是否是okHttp所在jar
-                    hasFoundOkHttp = findTargetJar(it.file, REGEX_OKHTTPCLIENT)
-                    if (hasFoundOkHttp) {
-                        Printer.p("找到okHttp包")
-                        // 执行注入代码
-                        OkOneInjects.inject(it.file, output)
-                        skip = true;
+                if (transformInvocation.isIncremental) {
+                    when (input.status) {
+                        Status.ADDED, Status.CHANGED -> {
+                            hasFoundOkHttp = transformJar(input.file, output, hasFoundOkHttp)
+                        }
+                        Status.REMOVED -> {
+                            if (output.exists()) {
+                                output.delete()
+                            }
+                        }
+                        Status.NOTCHANGED -> {
+                            // do nothing
+                        }
                     }
-                }
-
-                // 跳过对okhttp文件的拷贝
-                if (!skip) {
-                    // 拷贝input文件到output路径
-                    FileUtils.copyFile(it.file, output)
+                } else {
+                    hasFoundOkHttp = transformJar(input.file, output, hasFoundOkHttp)
                 }
             }
 
-            it.directoryInputs.forEach {
+            it.directoryInputs.forEach { input ->
                 // 获取output路径
-                val output = outputProvider.getContentLocation(
-                        it.name,
-                        it.contentTypes,
-                        it.scopes,
+                val outputDir = outputProvider.getContentLocation(
+                        input.name,
+                        input.contentTypes,
+                        input.scopes,
                         Format.DIRECTORY
                 )
-                // 拷贝input文件到output路径
-                FileUtils.copyDirectory(it.file, output)
+
+                if (transformInvocation.isIncremental) {
+                    input.changedFiles.forEach { entry: Map.Entry<File, Status> ->
+                        val destFile = File(entry.key.absolutePath
+                                .replace(input.file.absolutePath, outputDir.absolutePath)
+                        )
+
+                        when (entry.value) {
+                            Status.ADDED, Status.CHANGED -> {
+                                try {
+                                    FileUtils.touch(destFile)
+                                } catch (e: IOException) {
+                                    FileUtils.forceMkdirParent(destFile)
+                                }
+                                FileUtils.copyFile(entry.key, destFile)
+                            }
+                            Status.REMOVED -> {
+                                if (destFile.exists()) {
+                                    destFile.delete()
+                                }
+                            }
+                            Status.NOTCHANGED -> {
+                                // do nothing
+                            }
+                        }
+                    }
+                } else {
+                    // 拷贝input文件到output路径
+                    FileUtils.copyDirectory(input.file, outputDir)
+                }
             }
         }
+    }
+
+    private fun transformJar(input: File, output: File, hasFoundOkHttp: Boolean) : Boolean {
+        // 标记当前jar是否是OkHttp
+        var isOkHttp = false
+
+        if (!hasFoundOkHttp) {
+            // 判断是否是okHttp所在jar
+            if (findTargetJar(input, REGEX_OKHTTPCLIENT)) {
+                Printer.p("找到okHttp包")
+                // 执行注入代码
+                OkOneInjects.inject(input, output)
+                isOkHttp = true;
+            }
+        }
+
+        // 跳过对OkHttp文件的拷贝
+        if (!isOkHttp) {
+            // 拷贝input文件到output路径
+            FileUtils.copyFile(input, output)
+        }
+
+        return isOkHttp;
     }
 
     companion object {
