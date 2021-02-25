@@ -88,10 +88,12 @@ class OkOneTransform : Transform() {
                 )
 
                 if (transformInvocation.isIncremental) {
+                    val srcDir = input.file.absolutePath
+                    val destDir = outputDir.absolutePath
+
                     input.changedFiles.forEach { entry: Map.Entry<File, Status> ->
-                        val destFile = File(entry.key.absolutePath
-                                .replace(input.file.absolutePath, outputDir.absolutePath)
-                        )
+                        val srcFile = entry.key
+                        val destFile = File(srcFile.absolutePath.replace(srcDir, destDir))
 
                         when (entry.value) {
                             Status.ADDED, Status.CHANGED -> {
@@ -100,7 +102,7 @@ class OkOneTransform : Transform() {
                                 } catch (e: IOException) {
                                     FileUtils.forceMkdirParent(destFile)
                                 }
-                                FileUtils.copyFile(entry.key, destFile)
+                                FileUtils.copyFile(srcFile, destFile)
                             }
                             Status.REMOVED -> {
                                 if (destFile.exists()) {
