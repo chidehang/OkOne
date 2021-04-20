@@ -1,7 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     repositories {
-        jcenter()
+        maven { url 'https://jitpack.io' }
         mavenLocal()
         google()
         mavenCentral()
@@ -13,13 +13,13 @@ buildscript {
     dependencies {
         classpath "com.android.tools.build:gradle:4.1.1"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        // 不支持gradle 6.+，改为使用panpf的
-//        classpath 'com.novoda:bintray-release:0.9.2'
-        classpath 'com.github.panpf.bintray-publish:bintray-publish:1.0.0'
+
+        // JitPack
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
 
         if (!Boolean.parseBoolean(LOCAL_DEBUG)) {
             // okone gradle plugin
-            classpath "com.cdh.okone:gradle:$okoneVersion"
+//            classpath "com.github.chidehang:okone-gradle-plugin:$okoneVersion"
         }
 
         // NOTE: Do not place your application dependencies here; they belong

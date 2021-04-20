@@ -21,7 +21,7 @@ buildscript {
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'plugin.cdh.okone'
+//apply plugin: 'plugin.cdh.okone'
 
 android {
     compileSdkVersion 29
@@ -75,7 +75,7 @@ dependencies {
     if (Boolean.parseBoolean(LOCAL_DEBUG)) {
         implementation project(':okone')
     } else {
-        implementation "com.cdh.okone:okone:$okoneVersion"
+        implementation "com.github.chidehang:OkOne:$okoneVersion"
     }
 
     api("com.squareup.okhttp3:logging-interceptor:$okhttpVersion")

@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 if (Boolean.parseBoolean(PUBLISH_OKONE_LIB)) {
-    apply from: 'publish_jcenter.gradle'
+    apply from: 'publish_remote_maven.gradle'
 }
 
 android {
