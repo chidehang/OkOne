@@ -13,7 +13,7 @@ buildscript {
     }
     dependencies {
         if (Boolean.parseBoolean(LOCAL_DEBUG)) {
-            classpath 'com.cdh.okone:gradle:2.3.0-beta'
+            classpath 'com.cdh.okone:gradle:local-beta'
         }
     }
 }
