@@ -21,7 +21,7 @@ buildscript {
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-//apply plugin: 'plugin.cdh.okone'
+apply plugin: 'plugin.cdh.okone'
 
 android {
     compileSdkVersion 29
