@@ -8,7 +8,7 @@ buildscript {
     }
 
     ext.kotlin_version = '1.3.72'
-    ext.okoneVersion = '2.3.0'
+    ext.okoneVersion = 'feature~migration_maven-SNAPSHOT'
 
     dependencies {
         classpath "com.android.tools.build:gradle:4.1.1"
@@ -19,7 +19,7 @@ buildscript {
 
         if (!Boolean.parseBoolean(LOCAL_DEBUG)) {
             // okone gradle plugin
-//            classpath "com.github.chidehang:okone-gradle-plugin:$okoneVersion"
+            classpath "com.github.chidehang.OkOne:okone-gradle-plugin:$okoneVersion"
         }
 
         // NOTE: Do not place your application dependencies here; they belong
@@ -29,7 +29,7 @@ buildscript {
 
 allprojects {
     repositories {
-        jcenter()
+        maven { url 'https://jitpack.io' }
         mavenLocal()
         google()
         mavenCentral()
