@@ -19,7 +19,7 @@ buildscript {
 
         if (!Boolean.parseBoolean(LOCAL_DEBUG)) {
             // okone gradle plugin
-            classpath "com.github.chidehang:okone-gradle-plugin:$okoneVersion"
+            classpath "com.github.chidehang.OkOne:okone-gradle-plugin:$okoneVersion"
         }
 
         // NOTE: Do not place your application dependencies here; they belong

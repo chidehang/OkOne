@@ -75,7 +75,7 @@ dependencies {
     if (Boolean.parseBoolean(LOCAL_DEBUG)) {
         implementation project(':okone')
     } else {
-        implementation "com.github.chidehang:OkOne:$okoneVersion"
+        implementation "com.github.chidehang.OkOne:okone:$okoneVersion"
     }
 
     api("com.squareup.okhttp3:logging-interceptor:$okhttpVersion")

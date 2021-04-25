@@ -31,10 +31,17 @@ okhttp的请求队列和连接池等控制和优化措施。
 
 > Minimum supported OkHttp version is 4.1.0
 
+**由于jCenter将于2021.05.01不再维护，OkOne现迁移至JitPack，请接入方重新依赖OkOne最新版本。**
+
+- 0.添加jitpack仓库
+```
+maven { url 'https://jitpack.io' }
+```
+
 - 1.在项目根目录的build.gradle里添加依赖
 ```
 dependencies {
-    classpath 'com.cdh.okone:gradle:2.3.0'
+    classpath 'com.github.chidehang.OkOne:okone-gradle-plugin:2.3.0'
 }
 ```
 
@@ -45,7 +52,7 @@ apply plugin: 'plugin.cdh.okone'
 
 - 3.在app module的build.gradle的dependencies里添加依赖
 ```
-implementation 'com.cdh.okone:okone:2.3.0'
+implementation 'com.github.chidehang.OkOne:okone:2.3.0'
 ```
 
 至此已完成接入，后续直接打包apk运行即可。
