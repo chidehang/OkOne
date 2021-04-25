@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>com.cdh.okone</groupId>
+  <artifactId>gradle</artifactId>
+  <versioning>
+    <release>local-beta</release>
+    <versions>
+      <version>local-beta</version>
+    </versions>
+    <lastUpdated>20210421112827</lastUpdated>
+  </versioning>
+</metadata>

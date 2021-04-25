@@ -1,9 +1,9 @@
 buildscript {
     repositories {
+        maven { url 'https://jitpack.io' }
         mavenLocal()
         google()
         mavenCentral()
-        jcenter()
         if (Boolean.parseBoolean(LOCAL_DEBUG)) {
             maven {
                 //本地Maven仓库地址
@@ -13,7 +13,7 @@ buildscript {
     }
     dependencies {
         if (Boolean.parseBoolean(LOCAL_DEBUG)) {
-            classpath 'com.cdh.okone:gradle:2.3.0-beta'
+            classpath 'com.cdh.okone:gradle:local-beta'
         }
     }
 }
@@ -75,7 +75,7 @@ dependencies {
     if (Boolean.parseBoolean(LOCAL_DEBUG)) {
         implementation project(':okone')
     } else {
-        implementation "com.cdh.okone:okone:$okoneVersion"
+        implementation "com.github.chidehang.OkOne:okone:$okoneVersion"
     }
 
     api("com.squareup.okhttp3:logging-interceptor:$okhttpVersion")
